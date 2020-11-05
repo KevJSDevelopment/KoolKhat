@@ -36,6 +36,7 @@ const App = (props) => {
       setCurrentChannel({...currentChannel, channel: data})
       console.log(currentChannel)
     })
+    
 
     //openning websocket
     const socket = new WebSocket('ws://localhost:3000/cable')
@@ -45,16 +46,17 @@ const App = (props) => {
 
       // props.cableApp.cable.subscriptions.create({channel: "newChannel" })
 
-      const msg = {
+      const msg = JSON.stringify({
         command: "subscribe",
         identifier: JSON.stringify({
           channel: "ChannelChannel"
         })
-      }
+      })
 
+      socket.send(msg)
     }
 
-    socket.onmessage = event => {console.log(event.data)}
+    // socket.onmessage = event => {console.log(event.data)}
 
   },[])
 
