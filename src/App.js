@@ -58,12 +58,32 @@ const App = (props) => {
       // debugger
     }
 
-    // socket.onmessage = event => {console.log(event.data)}
+    socket.onmessage = event => {
+      const response = event.data
+      const msg = JSON.parse(response)
+      if(msg.type === "ping"){
+        return;
+      }
+      else {
+        console.log(msg.message)
+      }
+    }
 
   },[])
 
+  const makeMessage = () => {
+    fetch("http://localhost:3000/messages", {
+      method: "POST",
+      headers: {"Content-Type" : "application/json"},
+      body: JSON.stringify({message: "it's working"})
+    })
+  }
+
   return (
-    <h1> Hello world! </h1>
+    <div>
+      <h1> Hello world! </h1>
+      <button onClick={makeMessage}> Make Message </button>
+    </div>
   );
 }
 
