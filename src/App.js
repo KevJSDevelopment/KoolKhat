@@ -4,10 +4,12 @@ import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 
 const App = (props) => {
 
- const [currentUser, setCurrentUser] = useState(null)
- const [allChannels, setAllChannels] = useState([])
- const [currentChannel, setCurrentChannel] = useState({channel: {}, users: [], messages: []})
+  const cableURL = "ws://localhost:3000/cable"
 
+  const [currentUser, setCurrentUser] = useState(null)
+  const [allChannels, setAllChannels] = useState([])
+  const [currentChannel, setCurrentChannel] = useState({channel: {}, users: [], messages: []})
+  const [currentMessage, setCurrentMessage] = useState({})
   // const openConnection = () => {
   //   return new WebSocket('wss://localhost:3000/cable')
   // }
@@ -24,6 +26,25 @@ const App = (props) => {
   //   socket.send(JSON.stringify(msg));
   // };
 
+  const openWebSocket = (webSocketUrl, channel) => {
+    const socket = (new WebSocket(webSocketUrl))
+    socket.onopen = event => {
+      console.log("rocket socket!!")
+
+      const msg = JSON.stringify({
+        command: "subscribe",
+        identifier: JSON.stringify({
+          id: 1,
+          channel: channel
+        })
+      })
+
+      socket.send(msg)
+      // debugger
+    }
+    return socket
+  }
+
   useEffect(() => {
 
     //fetching channel in case we need the information... 
@@ -32,31 +53,12 @@ const App = (props) => {
     fetch("http://localhost:3000/channels/1")
     .then(res => res.json())
     .then(data => {
-      console.log(data)
+      // console.log(data)
       setCurrentChannel({...currentChannel, channel: data})
-      console.log(currentChannel)
     })
     
-
     //openning websocket
-    const socket = new WebSocket('ws://localhost:3000/cable')
-    
-    socket.onopen = event => {
-      console.log("rocket socket!!")
-
-      // props.cableApp.cable.subscriptions.create({channel: "newChannel" })
-
-      const msg = JSON.stringify({
-        command: "subscribe",
-        identifier: JSON.stringify({
-          id: 5,
-          channel: "ChannelChannel"
-        })
-      })
-
-      socket.send(msg)
-      // debugger
-    }
+    const socket = openWebSocket(cableURL, "ChannelChannel")
 
     socket.onmessage = event => {
       const response = event.data
@@ -64,11 +66,14 @@ const App = (props) => {
       if(msg.type === "ping"){
         return;
       }
-      else if (msg.message) {
-        
-        console.log(msg.message.text)
-        
+      else if (msg) {
+        console.log(msg)
+        // setCurrentMessage(msg.message)
+        // let newMsgArr = currentChannel.messages
+        // newMsgArr.push(msg.message.text)
+        // setCurrentChannel({...currentChannel, messages: newMsgArr})
       }
+      // console.log
     }
 
   },[])
@@ -83,6 +88,7 @@ const App = (props) => {
 
   return (
     <div>
+      {/* {console.log(currentChannel)} */}
       <h1> Hello world! </h1>
       <button onClick={makeMessage}> Make Message </button>
     </div>
