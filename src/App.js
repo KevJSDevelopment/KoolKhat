@@ -10,21 +10,6 @@ const App = (props) => {
   const [allChannels, setAllChannels] = useState([])
   const [currentChannel, setCurrentChannel] = useState({channel: {}, users: [], messages: []})
   const [currentMessage, setCurrentMessage] = useState({})
-  // const openConnection = () => {
-  //   return new WebSocket('wss://localhost:3000/cable')
-  // }
-
-  // socket.onopen = function(event) {
-  //   console.log('WebSocket is connected.');
-  //   const msg = {
-  //       command: 'subscribe',
-  //       identifier: JSON.stringify({
-  //           id: chatRoomId,
-  //           channel: 'ChatRoomChannel'
-  //       }),
-  //   };
-  //   socket.send(JSON.stringify(msg));
-  // };
 
   const openWebSocket = (webSocketUrl, channel) => {
     const socket = (new WebSocket(webSocketUrl))
@@ -34,22 +19,35 @@ const App = (props) => {
       const msg = JSON.stringify({
         command: "subscribe",
         identifier: JSON.stringify({
-          id: 1,
+          id: 5,
           channel: channel
         })
       })
 
       socket.send(msg)
-      // debugger
     }
     return socket
   }
+  
+
+  const makeMessage = (words) => {
+    fetch("http://localhost:3000/messages", {
+      method: "POST",
+      headers: {"Content-Type" : "application/json"},
+      body: JSON.stringify({message: words})
+    })
+  }
+
+
+
 
   useEffect(() => {
 
     //fetching channel in case we need the information... 
     //prob not going to be in final code ... 
     //prob fetch user and user will have their channels 
+    
+    //turn into fetching user after login 
     fetch("http://localhost:3000/channels/1")
     .then(res => res.json())
     .then(data => {
@@ -78,19 +76,17 @@ const App = (props) => {
 
   },[])
 
-  const makeMessage = () => {
-    fetch("http://localhost:3000/messages", {
-      method: "POST",
-      headers: {"Content-Type" : "application/json"},
-      body: JSON.stringify({message: "YOOOOOO"})
-    })
-  }
-
   return (
     <div>
       {/* {console.log(currentChannel)} */}
       <h1> Hello world! </h1>
-      <button onClick={makeMessage}> Make Message </button>
+      <form onSubmit={(e) => {
+        e.preventDefault()
+        makeMessage(e.target[0].value)
+      }}>
+        <input type="text" />
+        <input type="submit" />
+      </form>
     </div>
   );
 }
