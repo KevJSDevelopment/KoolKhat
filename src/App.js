@@ -29,7 +29,7 @@ const App = (props) => {
     //fetching channel in case we need the information... 
     //prob not going to be in final code ... 
     //prob fetch user and user will have their channels 
-    fetch("http://localhost:3000/channels/2")
+    fetch("http://localhost:3000/channels/1")
     .then(res => res.json())
     .then(data => {
       console.log(data)
@@ -49,11 +49,13 @@ const App = (props) => {
       const msg = JSON.stringify({
         command: "subscribe",
         identifier: JSON.stringify({
+          id: 1,
           channel: "ChannelChannel"
         })
       })
 
       socket.send(msg)
+      // debugger
     }
 
     // socket.onmessage = event => {console.log(event.data)}
