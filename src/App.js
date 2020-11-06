@@ -49,7 +49,7 @@ const App = (props) => {
       const msg = JSON.stringify({
         command: "subscribe",
         identifier: JSON.stringify({
-          id: 1,
+          id: 5,
           channel: "ChannelChannel"
         })
       })
@@ -64,8 +64,10 @@ const App = (props) => {
       if(msg.type === "ping"){
         return;
       }
-      else {
-        console.log(msg.message)
+      else if (msg.message) {
+        
+        console.log(msg.message.text)
+        
       }
     }
 
@@ -75,7 +77,7 @@ const App = (props) => {
     fetch("http://localhost:3000/messages", {
       method: "POST",
       headers: {"Content-Type" : "application/json"},
-      body: JSON.stringify({message: "it's working"})
+      body: JSON.stringify({message: "YOOOOOO"})
     })
   }
 
