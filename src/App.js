@@ -72,6 +72,7 @@ const App = (props) => {
         command: "subscribe",
         identifier: JSON.stringify({
           id: 5,
+          // change me!!!!
           channel: channel
         })
       })
@@ -133,7 +134,7 @@ const App = (props) => {
       </Typography>
 
       {/* <NavBar/> */} 
-      
+
       <Container className= {classes.container} maxWidth= 'xl'>
         <Grid container>
           {/* left side  */}
