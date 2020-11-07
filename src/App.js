@@ -58,7 +58,7 @@ const App = (props) => {
 
   const [currentUser, setCurrentUser] = useState(null)
   const [allChannels, setAllChannels] = useState([])
-  const [currentChannel, setCurrentChannel] = useState({channel: {}, users: [], messages: []})
+  const [currentChannel, setCurrentChannel] = useState({channel: {}, messages: []})
   const [currentMessage, setCurrentMessage] = useState({})
 
   /**************************************************************************************************/ 
@@ -72,7 +72,7 @@ const App = (props) => {
       const msg = JSON.stringify({
         command: "subscribe",
         identifier: JSON.stringify({
-          id: 1,
+          id: 2,
           channel: channel
         })
       })
@@ -102,7 +102,7 @@ const App = (props) => {
     fetch("http://localhost:3000/channels/1")
     .then(res => res.json())
     .then(data => {
-      // console.log(data)
+      console.log(data)
       setCurrentChannel({...currentChannel, channel: data})
     })
     
@@ -111,19 +111,17 @@ const App = (props) => {
 
     socket.onmessage = event => {
       // debugger
-      const response = event.data
-      const msg = JSON.parse(response)
-      // debugger
-      if(msg.type === "ping"){
+      const evData = event.data
+      const response = JSON.parse(evData)
+      if(response.type === "ping"){
         return;
       }
-      else if (msg.message) {
-        // debugger
+      else if (response.message) {
         // console.log(msg.message.message.text)
-        setCurrentMessage(msg.message.message)
+        // setCurrentMessage(msg.message.message)
         let newMsgArr = currentChannel.messages
-        newMsgArr.push(msg.message.message)
-        setCurrentChannel({...currentChannel, messages: newMsgArr, users: msg.message.users})
+        newMsgArr.push(response.message.message_info)
+        setCurrentChannel({...currentChannel, messages: newMsgArr})
       }
     }
 
@@ -143,7 +141,7 @@ const App = (props) => {
           <Info classes={classes} />
 
           {/* right side */}
-          <ChatRoom classes={classes} makeMessage={makeMessage} messages={currentChannel.messages} users={currentChannel.users} />
+          <ChatRoom classes={classes} makeMessage={makeMessage} messages={currentChannel.messages} />
         </Grid>   
       </Container>
     </div>

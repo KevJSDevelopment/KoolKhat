@@ -20,13 +20,8 @@ const ChatRoom = (props) => {
             <Grid item xs= {12}>
                 <Paper className={props.classes.paper} style={{height: window.innerHeight/1.15}}>
                     {props.messages.map(message => {
-                        let msgComponent = null
-                        props.users.map(user => {
-                            if(user.id === message.user_id){
-                                msgComponent = <Message message={message} user={user} key={message.id}/>
-                            }
-                        })
-                        return msgComponent
+                        // console.log(message.user.id)
+                        return <Message message={message.data} user={message.user} key={message.data.id}/>
                     })}
                 </Paper>
             </Grid>
