@@ -133,7 +133,7 @@ const App = (props) => {
       </Typography>
 
       {/* <NavBar/> */} 
-   
+      
       <Container className= {classes.container} maxWidth= 'xl'>
         <Grid container>
           {/* left side  */}
