@@ -123,7 +123,7 @@ const App = (props) => {
         setCurrentMessage(msg.message.message)
         let newMsgArr = currentChannel.messages
         newMsgArr.push(msg.message.message)
-        setCurrentChannel({...currentChannel, messages: newMsgArr})
+        setCurrentChannel({...currentChannel, messages: newMsgArr, users: msg.message.users})
       }
     }
 
@@ -143,7 +143,7 @@ const App = (props) => {
           <Info classes={classes} />
 
           {/* right side */}
-          <ChatRoom classes={classes} makeMessage={makeMessage} messages={currentChannel.messages} />
+          <ChatRoom classes={classes} makeMessage={makeMessage} messages={currentChannel.messages} users={currentChannel.users} />
         </Grid>   
       </Container>
     </div>

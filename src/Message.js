@@ -15,18 +15,19 @@ const Message = (props) => {
           alignItems="top"
           xs={12} 
         >
-            <Grid item xs={11}>
+            <Grid item xs={1} style={{margin: 5}}>
+                 <Paper>
+                    {props.user.username}:
+                </Paper>
+            </Grid>
+
+            <Grid item xs={10} style={{margin: 5}}>
                 <Paper>     
                     {props.message.text}
                 </Paper>
             </Grid>
 
-            <Grid item xs={1}>
-                 <Paper>
-                     
-                    {props.message.user_id}
-                </Paper>
-            </Grid>
+            
         </Grid>
     )
 }
