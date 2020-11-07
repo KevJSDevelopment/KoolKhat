@@ -27,7 +27,6 @@ const Message = (props) => {
                 </Paper>
             </Grid>
 
-            
         </Grid>
     )
 }

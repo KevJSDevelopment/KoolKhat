@@ -63,7 +63,6 @@ const App = (props) => {
 
   /**************************************************************************************************/ 
 
-
   const openWebSocket = (webSocketUrl, channel) => {
     const socket = (new WebSocket(webSocketUrl))
     socket.onopen = event => {
@@ -72,7 +71,7 @@ const App = (props) => {
       const msg = JSON.stringify({
         command: "subscribe",
         identifier: JSON.stringify({
-          id: 2,
+          id: 5,
           channel: channel
         })
       })
@@ -91,38 +90,38 @@ const App = (props) => {
     })
   }
 
+  const setNewMessage = (event) =>  {
+    const evData = event.data
+    const response = JSON.parse(evData)
+    if(response.type === "ping"){
+      return;
+    }
+    else if (response.message) {
+      let newMsgArr = currentChannel.messages
+      newMsgArr.push(response.message.message_info)
+      setCurrentChannel(prevState => ({...prevState, messages: [...prevState.messages, response.message.message_info]}))
+      return newMsgArr
+    }
+  }
+
+  const getOldMessages = async () => {
+    const res = await fetch("http://localhost:3000/channels/1")
+    const data = await res.json()
+    setCurrentChannel((prevState) => ({...prevState, channel: data.channel, messages: data.message_info}))
+  }
+
   useEffect(() => {
 
-    console.log("hit useEffect")
-    //fetching channel in case we need the information... 
-    //prob not going to be in final code ... 
-    //prob fetch user and user will have their channels 
-    
-    //turn into fetching user after login 
-    fetch("http://localhost:3000/channels/1")
-    .then(res => res.json())
-    .then(data => {
-      console.log(data)
-      setCurrentChannel({...currentChannel, channel: data})
-    })
-    
-    //openning websocket
+    const stay = async () => {
+      await getOldMessages()
+    }
+
+    stay()
+
     const socket = openWebSocket(cableURL, "ChannelChannel")
 
     socket.onmessage = event => {
-      // debugger
-      const evData = event.data
-      const response = JSON.parse(evData)
-      if(response.type === "ping"){
-        return;
-      }
-      else if (response.message) {
-        // console.log(msg.message.message.text)
-        // setCurrentMessage(msg.message.message)
-        let newMsgArr = currentChannel.messages
-        newMsgArr.push(response.message.message_info)
-        setCurrentChannel({...currentChannel, messages: newMsgArr})
-      }
+      setNewMessage(event)
     }
 
   },[])
