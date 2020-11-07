@@ -7,6 +7,8 @@ import { Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import { grid } from '@material-ui/system';
+import ChatRoom from './ChatRoom'
+import Info from './Info';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
     margin: 5,
     padding: 0,
     border: 0,
-
   },
   container: {
     background: "#ff8a80",
@@ -71,7 +72,7 @@ const App = (props) => {
       const msg = JSON.stringify({
         command: "subscribe",
         identifier: JSON.stringify({
-          id: 5,
+          id: 1,
           channel: channel
         })
       })
@@ -89,9 +90,6 @@ const App = (props) => {
       body: JSON.stringify({message: words})
     })
   }
-
-
-
 
   useEffect(() => {
 
@@ -112,16 +110,19 @@ const App = (props) => {
     const socket = openWebSocket(cableURL, "ChannelChannel")
 
     socket.onmessage = event => {
+      // debugger
       const response = event.data
       const msg = JSON.parse(response)
+      // debugger
       if(msg.type === "ping"){
         return;
       }
       else if (msg.message) {
-        console.log(msg.message.message.text)
+        // debugger
+        // console.log(msg.message.message.text)
         setCurrentMessage(msg.message.message)
         let newMsgArr = currentChannel.messages
-        newMsgArr.push(msg.message.message.text)
+        newMsgArr.push(msg.message.message)
         setCurrentChannel({...currentChannel, messages: newMsgArr})
       }
     }
@@ -134,52 +135,15 @@ const App = (props) => {
           Kool Kids section
       </Typography>
 
-      {/* <NavBar/> */}
-        
+      {/* <NavBar/> */} 
+   
       <Container className= {classes.container} maxWidth= 'xl'>
-
         <Grid container>
-
-          <Grid container item 
-          direction="row"
-          alignItems="center"
-          xs={2} 
-          className= {classes.info}>
-            <Grid item xs={12}>
-              <Paper className={classes.paper} style= {{height: window.innerHeight}}>
-                infoSpace
-              </Paper>
-            </Grid>
-          </Grid>
+          {/* left side  */}
+          <Info classes={classes} />
 
           {/* right side */}
-          <Grid container item 
-          direction="row"
-          alignItems="top"  
-          xs= {10} 
-          className = {classes.chatSpace}
-          >
-
-            <Grid item xs= {12}>
-              <Paper className={classes.paper} style= {{height: window.innerHeight/1.25}}>
-                
-              </Paper>
-            </Grid>
-
-            <Grid item xs= {12}>
-              <Paper className={classes.paper} style= {{float: "right"}}>
-                <form className= {classes.form} onSubmit={(e) => {
-              e.preventDefault()
-              makeMessage(e.target[0].value)
-              }}>
-                <input type="text" />
-                <input type="submit" />
-              </form>
-              </Paper>
-              
-            </Grid>
-          </Grid>
-
+          <ChatRoom classes={classes} makeMessage={makeMessage} messages={currentChannel.messages} />
         </Grid>   
       </Container>
     </div>
