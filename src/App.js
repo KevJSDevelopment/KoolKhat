@@ -9,21 +9,24 @@ import Paper from '@material-ui/core/Paper'
 import { grid } from '@material-ui/system';
 import ChatRoom from './ChatRoom'
 import Info from './Info';
+import logo from "./images/kklogo2.png"
+import DrawerAndNav from "./drawerAndNav"
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    background: "#546e7a",
+    background: "#819ca9", //light blue
     margin: 0,
     padding: 0,
     border: 0,
     maxHeight: "100%",
     height: window.innerHeight,
     flexGrow: 1,
-    align: "bottom",
+    display: 'flex',
+    
 
   },
   paper: {
-    background: "#29434e",
+    background: "#29434e", //dark blue
     margin: 5,
     padding: 0,
     border: 0,
@@ -37,16 +40,29 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: 20,
     border: 0,
     align: "center"
+    
   },
   form:{
     align: "center"
   },
   info:{
-    background: "#546e7a"
+    background: "#819ca9"
   },
   chatSpace: {
-    background: "#546e7a",
+    background: "#819ca9",
     // padding 10,
+  },
+  toolbar: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
   }
   
  
@@ -63,7 +79,7 @@ const App = (props) => {
   const [allChannels, setAllChannels] = useState([])
   const [currentChannel, setCurrentChannel] = useState({channel: {}, messages: []})
   const [currentMessage, setCurrentMessage] = useState({})
-
+  
   /**************************************************************************************************/ 
 
   const openWebSocket = (webSocketUrl, channel) => {
@@ -125,30 +141,31 @@ const App = (props) => {
       setNewMessage(event)
     }
 
-    let bottomOfMessages = document.querySelector("#scrollTarget")
-    bottomOfMessages.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
   },[])
 
   return (
     <div className= {classes.root}>
-      <Typography variant= "h1">
-          Kool Kids section
-      </Typography>
+      {/* <Typography variant= "h3">
+          <img src= {logo} style={{maxWidth: "8%"}}/>
+      </Typography> */}
 
-      {/* <NavBar/> */} 
+      <DrawerAndNav /> 
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+          <Container 
+          className= {classes.container} 
+          maxWidth= 'xl' 
+          >
+            <Grid container >
+              {/* left side  */}
 
-      <Container className= {classes.container} maxWidth= 'xl'>
-        <Grid container >
-          {/* left side  */}
-
-          {/* right side */}
-          <ChatRoom classes={classes} makeMessage={makeMessage} messages={currentChannel.messages} />
-        </Grid>   
-      </Container>
+              {/* right side */}
+              <ChatRoom classes={classes} makeMessage={makeMessage} messages={currentChannel.messages} />
+            </Grid>   
+          </Container>
+        </main>
     </div>
   );
 }
 
 export default App
-

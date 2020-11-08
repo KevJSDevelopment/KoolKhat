@@ -10,7 +10,7 @@ const theme = createMuiTheme({
 
   typography: {
       //for any general settings to be added accross the website
-      h1: {
+      h3: {
         textAlign: "center"
       }
 

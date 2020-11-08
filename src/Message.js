@@ -16,16 +16,19 @@ const Message = (props) => {
           xs={12} 
           style={{marginBottom:"1%"}}
         >
-            <Grid item xs={1} style={{margin: 5, marginLeft:"2%"}}>
-                 <Paper>
+            <Grid item xs={1} style={{margin: 5, marginLeft:"2%", marginRight: 0, padding: 0}}>
+                <Paper style={{maxWidth: "50%", width: "100%"}}>
                     {props.user.username}:
                 </Paper>
             </Grid>
 
-            <Grid item xs={4} style={{margin: 5}}>
+            <Grid item xs={4} style={{margin: 5, marginLeft: 0, padding:0}}>
                 <Paper elevation={3}>     
                     {props.message.text}
                 </Paper>
+                    <Typography variant= "subtitle2" style={{float: "right", font: "5", color: "#2bbd7e"}}>
+                        {props.user.username}
+                    </Typography>
             </Grid>
 
         </Grid>
