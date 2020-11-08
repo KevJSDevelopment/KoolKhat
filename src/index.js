@@ -1,23 +1,40 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
 import './index.css';
 import App from './App';
-import actionCable from 'actioncable'
+import { createMuiTheme, ThemeProvider } from "@material-ui/core";
+import 'fontsource-roboto';
+import Typography from '@material-ui/core/Typography'
 
-const CableApp = {}
+const theme = createMuiTheme({
 
-CableApp.cable = actionCable.createConsumer('ws://localhost:3000/cable')
+  typography: {
+      //for any general settings to be added accross the website
+      h3: {
+        textAlign: "center"
+      }
 
-
+  },
+  palette: {
+    primary: {
+      main: "#2bbd7e" 
+    },
+    secondary: {
+      main: "#9fffe0" //Another orange-ish color
+    }
+  },
+  fontFamily: 'roboto' // as an aside, highly recommend importing roboto font for Material UI projects! Looks really nice
+});
 
 ReactDOM.render(
-  <Router>
-    <App cableApp= {CableApp} />
-  </Router>,
-  document.getElementById('root')
+  <ThemeProvider 
+    theme={theme}>
+    <Typography />
+      <App />
+    <Typography />
+  </ThemeProvider>,
+  document.getElementById("root")
 );
-
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
