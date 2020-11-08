@@ -17,10 +17,10 @@ const theme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: "#c85a54" 
+      main: "#2bbd7e" 
     },
     secondary: {
-      main: "#c85a54" //Another orange-ish color
+      main: "#9fffe0" //Another orange-ish color
     }
   },
   fontFamily: 'roboto' // as an aside, highly recommend importing roboto font for Material UI projects! Looks really nice

@@ -16,7 +16,7 @@ const Info = (props) => {
           className={props.classes.info}
         >
             <Grid item xs={12}>
-              <Paper className={props.classes.paper} style= {{height: window.innerHeight/1.5}}>
+              <Paper className={props.classes.paper} style= {{height: window.innerHeight/1.75}}>
                 Channels
               </Paper>
             </Grid>

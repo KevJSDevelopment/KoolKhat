@@ -14,15 +14,16 @@ const Message = (props) => {
           direction="row"
           alignItems="top"
           xs={12} 
+          style={{marginBottom:"1%"}}
         >
-            <Grid item xs={1} style={{margin: 5}}>
+            <Grid item xs={1} style={{margin: 5, marginLeft:"2%"}}>
                  <Paper>
                     {props.user.username}:
                 </Paper>
             </Grid>
 
-            <Grid item xs={10} style={{margin: 5}}>
-                <Paper>     
+            <Grid item xs={4} style={{margin: 5}}>
+                <Paper elevation={3}>     
                     {props.message.text}
                 </Paper>
             </Grid>

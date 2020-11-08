@@ -12,38 +12,41 @@ import Info from './Info';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    background: "#ff8a80",
+    background: "#546e7a",
     margin: 0,
     padding: 0,
     border: 0,
-    
+    maxHeight: "100%",
+    height: window.innerHeight,
     flexGrow: 1,
+    align: "bottom",
 
   },
   paper: {
-    background: "grey",
+    background: "#29434e",
     margin: 5,
     padding: 0,
     border: 0,
+    
   },
   container: {
-    background: "#ff8a80",
-    align: "center",
     width: "full",
     margin: 0,
     padding: 10,
     paddingLeft: 20,
     paddingRight: 20,
-    border: 0
+    border: 0,
+    align: "center"
   },
   form:{
     align: "center"
   },
   info:{
-    background: "lightGreen"
+    background: "#546e7a"
   },
   chatSpace: {
-    background: "lightGreen"
+    background: "#546e7a",
+    // padding 10,
   }
   
  
@@ -71,7 +74,7 @@ const App = (props) => {
       const msg = JSON.stringify({
         command: "subscribe",
         identifier: JSON.stringify({
-          id: 5,
+          id: 7,
           // change me!!!!
           channel: channel
         })
@@ -98,10 +101,7 @@ const App = (props) => {
       return;
     }
     else if (response.message) {
-      let newMsgArr = currentChannel.messages
-      newMsgArr.push(response.message.message_info)
       setCurrentChannel(prevState => ({...prevState, messages: [...prevState.messages, response.message.message_info]}))
-      return newMsgArr
     }
   }
 
@@ -125,6 +125,9 @@ const App = (props) => {
       setNewMessage(event)
     }
 
+    let bottomOfMessages = document.querySelector("#scrollTarget")
+    bottomOfMessages.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
   },[])
 
   return (
@@ -136,9 +139,8 @@ const App = (props) => {
       {/* <NavBar/> */} 
 
       <Container className= {classes.container} maxWidth= 'xl'>
-        <Grid container>
+        <Grid container >
           {/* left side  */}
-          <Info classes={classes} />
 
           {/* right side */}
           <ChatRoom classes={classes} makeMessage={makeMessage} messages={currentChannel.messages} />
