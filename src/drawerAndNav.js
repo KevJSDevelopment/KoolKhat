@@ -147,9 +147,12 @@ const DrawerAndNav = () => {
                         {theme.direction === 'rtl' ? <ChevronRightIcon style={{color: "white"}}/> : <ChevronLeftIcon style={{color: "white"}} />}
                     </IconButton>
                 </div>
-            <Divider />
+                <Divider />
                 <br/>
                 <br/>
+                <Divider />
+                <div style={{textAlign: "center", backgroundColor: "#29434e"}}>Friends</div>
+                <Divider />
                 <List>
                     {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
                         <ListItem button key={text}>
@@ -158,7 +161,9 @@ const DrawerAndNav = () => {
                         </ListItem>
                     ))}
                 </List>
-            <Divider />
+                <Divider />
+                <div style={{textAlign: "center", backgroundColor: "#29434e"}}>Rooms</div>
+                <Divider />
                 <List >
                     {['All mail', 'Trash', 'Spam'].map((text, index) => (
                         <ListItem  button key={text}>
@@ -167,6 +172,9 @@ const DrawerAndNav = () => {
                         </ListItem>
                     ))}
                 </List>
+                <Divider />
+                <div style={{textAlign: "center", backgroundColor: "#29434e"}}>Settings</div>
+                <Divider />
             </Drawer>
         </div>
     )
