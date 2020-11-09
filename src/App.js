@@ -8,8 +8,11 @@ import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import { grid } from '@material-ui/system';
 import ChatRoom from './ChatRoom'
-import logo from "./images/kklogo2.png"
+import iconLogo from "./images/kklogo2.png"
+import logo from "./images/Logo.png"
 import DrawerAndNav from "./drawerAndNav"
+import Modal from '@material-ui/core/Modal'
+import Login from "./Login"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,6 +34,19 @@ const useStyles = makeStyles((theme) => ({
     border: 0,
     
   },
+  modal: {
+    width: '30%',
+    maxWidth: '100vw',
+    maxHeight: '100%',
+    position: 'fixed',
+    top: '25%',
+    left: '35%',
+    overflow: 'auto',
+    height: "50%",
+    background: "whitesmoke",
+    backgroundImage: `url(${logo})`,
+    border: "3px solid white"
+  },
   container: {
     width: "full",
     margin: 0,
@@ -39,7 +55,6 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: 20,
     border: 0,
     align: "center"
-    
   },
   form:{
     align: "center"
@@ -49,7 +64,6 @@ const useStyles = makeStyles((theme) => ({
   },
   chatSpace: {
     background: "#819ca9",
-    // padding 10,
   },
   toolbar: {
     display: 'flex',
@@ -77,6 +91,7 @@ const App = (props) => {
   const [currentUser, setCurrentUser] = useState(null)
   const [allChannels, setAllChannels] = useState([])
   const [currentChannel, setCurrentChannel] = useState({channel: {}, messages: []})
+  const [loginOpen, setLoginOpen] = useState(false);
   // const [currentMessage, setCurrentMessage] = useState({})
   
   /**************************************************************************************************/ 
@@ -103,6 +118,14 @@ const App = (props) => {
     return socket
   }
   
+  const handleLoginOpen = () => {
+    setLoginOpen(true);
+};
+
+const handleLoginClose = () => {
+    setLoginOpen(false);
+};
+
 
   const makeMessage = (words) => {
     fetch("http://localhost:3000/messages", {
@@ -168,7 +191,7 @@ const App = (props) => {
           <img src= {logo} style={{maxWidth: "8%"}}/>
       </Typography> */}
 
-      <DrawerAndNav channels={allChannels} setChannel={setMyChannel}/> 
+      <DrawerAndNav handleLoginOpen={handleLoginOpen} channels={allChannels} setChannel={setMyChannel}/> 
       <main className={classes.content}>
         <div className={classes.toolbar} />
           <Container 
@@ -178,6 +201,14 @@ const App = (props) => {
             <Grid container >
               {/* left side  */}
 
+              <Modal
+              open={loginOpen}
+              onClose={handleLoginClose}
+              aria-labelledby="simple-modal-title"
+              aria-describedby="simple-modal-description"
+              >
+                <Login classes={classes}/>
+              </Modal>
               {/* right side */}
               <ChatRoom classes={classes} makeMessage={makeMessage} messages={currentChannel.messages} />
             </Grid>   

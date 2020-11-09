@@ -8,6 +8,7 @@ import List from '@material-ui/core/List';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -17,6 +18,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import { Grid } from '@material-ui/core';
+import Modal from '@material-ui/core/Modal'
 
 const drawerWidth = 180;
 
@@ -28,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     backgroundColor: "#29434e",
-    color: "#819ca9"
+    color: "#FFFFFF"
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -83,6 +86,13 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
         color: "#29434e",
       }
+  },
+  login: {
+    color: "#FFFFFF",
+    backgroundColor: "#29434e",
+    '&:hover': {
+      backgroundColor: "#2bbd7e",
+    },
   }
 
 }));
@@ -94,6 +104,7 @@ const DrawerAndNav = (props) => {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -101,6 +112,7 @@ const DrawerAndNav = (props) => {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
 
     return (
         <div>
@@ -112,7 +124,7 @@ const DrawerAndNav = (props) => {
                 })}
                 style= {{}}
             >
-                <Toolbar>
+                <Toolbar style={{justifyContent: "space-between"}}>
                     <IconButton
                     color="inherit"
                     aria-label="open drawer"
@@ -124,24 +136,29 @@ const DrawerAndNav = (props) => {
                     >
                         <MenuIcon />
                     </IconButton>
-                        <Typography variant="h6" noWrap>
-                            Kool Khat
-                        </Typography>
+
+                    <Typography variant="h6" >
+                        Kool Khat
+                    </Typography>
+
+                    <Button onClick={props.handleLoginOpen} className={classes.login}>
+                        Login
+                    </Button>
                 </Toolbar>
             </AppBar>
 
             <Drawer
-                variant="permanent"
-                className={clsx(classes.drawer, {
+            variant="permanent"
+            className={clsx(classes.drawer, {
+                [classes.drawerOpen]: open,
+                [classes.drawerClose]: !open,
+            })}
+            classes={{
+                paper: clsx({
                     [classes.drawerOpen]: open,
                     [classes.drawerClose]: !open,
-                })}
-                classes={{
-                    paper: clsx({
-                        [classes.drawerOpen]: open,
-                        [classes.drawerClose]: !open,
-                    }),
-                }}
+                }),
+            }}
             >
                 <div className={classes.toolbar}>
                     <IconButton onClick={handleDrawerClose}>
