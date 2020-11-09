@@ -8,7 +8,6 @@ import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import { grid } from '@material-ui/system';
 import ChatRoom from './ChatRoom'
-import Info from './Info';
 import logo from "./images/kklogo2.png"
 import DrawerAndNav from "./drawerAndNav"
 
@@ -126,6 +125,7 @@ const App = (props) => {
 
   const getOldMessages = async () => {
     //make this dynamic
+    //localStorage.setItem("channelId", 7) //hardsetting localStorage, make sure number is set properly
     const res = await fetch(`http://localhost:3000/channels/${localStorage.getItem("channelId")}`)
     const data = await res.json()
     setCurrentChannel((prevState) => ({...prevState, channel: data.channel, messages: data.message_info}))

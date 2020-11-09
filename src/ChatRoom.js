@@ -11,7 +11,21 @@ import TelegramIcon from '@material-ui/icons/Telegram';
 
 import Message from "./Message"
 
+const useStyles = makeStyles((theme) => ({
+    label: {
+        color: "white",
+    },
+    focusedLabel: {
+        color: "#2bbd7e"
+    },
+    text: {
+        color: "#FFFFFF"
+    }
+  }))
+
 const ChatRoom = (props) => {
+
+    const classes = useStyles();
 
     const messagesEndRef = useRef(null)  
 
@@ -51,8 +65,21 @@ const ChatRoom = (props) => {
                                 e.currentTarget.reset()
                             }
                         }}>
-                        <TextField placeholder= "" id="outlined-basic" label="Send Message" variant="outlined" style ={{width: "95%"}} />
-                        <IconButton type= {"submit"} color="secondary" aria-label="send" style ={{align: "center"}}>
+                        <TextField 
+                        placeholder="" 
+                        id="outlined-basic" 
+                        label="Send Message" 
+                        variant="outlined"
+                        InputLabelProps={{
+                            classes: {
+                                root: classes.label,
+                                focused: classes.focusedLabel
+                            }
+                        }} 
+                        InputProps={{ className: classes.text}}
+                        style ={{ color: "white" , width: "94%"}} 
+                        />
+                        <IconButton type= {"submit"} color="secondary" aria-label="send" style={{align: "center"}}>
                             <TelegramIcon fontSize={"large"} style={{fill: "#2bbd7e"}}/>
                         </IconButton>
                     </form>
