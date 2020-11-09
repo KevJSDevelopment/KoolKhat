@@ -78,22 +78,25 @@ const App = (props) => {
   const [currentUser, setCurrentUser] = useState(null)
   const [allChannels, setAllChannels] = useState([])
   const [currentChannel, setCurrentChannel] = useState({channel: {}, messages: []})
-  const [currentMessage, setCurrentMessage] = useState({})
+  // const [currentMessage, setCurrentMessage] = useState({})
   
   /**************************************************************************************************/ 
 
-  const openWebSocket = (webSocketUrl, channel) => {
+  const openWebSocket = (webSocketUrl, server) => {
     const socket = (new WebSocket(webSocketUrl))
     socket.onopen = event => {
-      console.log("rocket socket!!")
+      // console.log("rocket socket!!")
 
+      const meta = {
+          id: localStorage.getItem("channelId"),
+          // change me!!!!
+          channel: server
+
+      }
+      console.log(meta)
       const msg = JSON.stringify({
         command: "subscribe",
-        identifier: JSON.stringify({
-          id: 7,
-          // change me!!!!
-          channel: channel
-        })
+        identifier: JSON.stringify(meta)
       })
 
       socket.send(msg)
@@ -106,7 +109,7 @@ const App = (props) => {
     fetch("http://localhost:3000/messages", {
       method: "POST",
       headers: {"Content-Type" : "application/json"},
-      body: JSON.stringify({message: words})
+      body: JSON.stringify({message: words, channel_id: localStorage.getItem("channelId")})
     })
   }
 
@@ -122,9 +125,23 @@ const App = (props) => {
   }
 
   const getOldMessages = async () => {
-    const res = await fetch("http://localhost:3000/channels/1")
+    //make this dynamic
+    const res = await fetch(`http://localhost:3000/channels/${localStorage.getItem("channelId")}`)
     const data = await res.json()
     setCurrentChannel((prevState) => ({...prevState, channel: data.channel, messages: data.message_info}))
+  }
+
+  const getChannels = () => {
+    fetch("http://localhost:3000/channels")
+      .then(res => res.json())
+      .then(channels => {
+        setAllChannels(channels)
+    })
+  }
+
+  const setMyChannel = (channel) => {
+    localStorage.setItem("channelId", channel.id)
+    getOldMessages()
   }
 
   useEffect(() => {
@@ -134,6 +151,8 @@ const App = (props) => {
     }
 
     stay()
+
+    getChannels()
 
     const socket = openWebSocket(cableURL, "ChannelChannel")
 
@@ -149,7 +168,7 @@ const App = (props) => {
           <img src= {logo} style={{maxWidth: "8%"}}/>
       </Typography> */}
 
-      <DrawerAndNav /> 
+      <DrawerAndNav channels={allChannels} setChannel={setMyChannel}/> 
       <main className={classes.content}>
         <div className={classes.toolbar} />
           <Container 

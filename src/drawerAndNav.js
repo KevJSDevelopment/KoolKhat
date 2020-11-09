@@ -87,8 +87,9 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const DrawerAndNav = () => {
+const DrawerAndNav = (props) => {
 
+  // console.log(props.channels)
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -154,9 +155,9 @@ const DrawerAndNav = () => {
                 <div style={{textAlign: "center", backgroundColor: "#29434e"}}>Friends</div>
                 <Divider />
                 <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem button key={text}>
-                        <ListItemIcon className={classes.list} >{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                        <ListItem  button key={text}>
+                        <ListItemIcon className={classes.list}>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                         <ListItemText primary={text} />
                         </ListItem>
                     ))}
@@ -165,12 +166,12 @@ const DrawerAndNav = () => {
                 <div style={{textAlign: "center", backgroundColor: "#29434e"}}>Rooms</div>
                 <Divider />
                 <List >
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem  button key={text}>
-                        <ListItemIcon className={classes.list}>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                        <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
+                    {props.channels.map((channel) => (
+                      <ListItem button key={channel.name} onClick={() => props.setChannel(channel)}>
+                      <ListItemIcon className={classes.list} >  <InboxIcon /> </ListItemIcon>
+                      <ListItemText primary={channel.name} />
+                      </ListItem>
+                  ))}
                 </List>
                 <Divider />
                 <div style={{textAlign: "center", backgroundColor: "#29434e"}}>Settings</div>
