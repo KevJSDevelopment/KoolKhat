@@ -150,9 +150,15 @@ const DrawerAndNav = (props) => {
                       </Grid>
                     </Grid>
 
-                    <Button onClick={props.handleLoginOpen} className={classes.login}>
-                        Login
-                    </Button>
+                      { !!localStorage.getItem("token") ? 
+                      <Button onClick={props.handleLogout} className={classes.login}>
+                        logout
+                      </Button>
+                        :
+                      <Button onClick={props.handleLoginOpen} className={classes.login}>
+                        login
+                      </Button>
+                      }
                 </Toolbar>
             </AppBar>
 

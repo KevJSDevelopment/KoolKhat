@@ -110,18 +110,17 @@ const App = (props) => {
   
   /**************************************************************************************************/ 
 
-  const openWebSocket = (webSocketUrl, server) => {
+  const openWebSocket = (webSocketUrl, channelId) => {
     const socket = (new WebSocket(webSocketUrl))
     socket.onopen = event => {
       // console.log("rocket socket!!")
 
       const meta = {
-          id: localStorage.getItem("channelId"),
+          id: channelId,
           // change me!!!!
-          channel: server
+          channel: "ChannelChannel"
 
       }
-      console.log(meta)
       const msg = JSON.stringify({
         command: "subscribe",
         identifier: JSON.stringify(meta)
@@ -153,17 +152,31 @@ const App = (props) => {
     .then(res => res.json())
     .then(data => {
       console.log(data)
+      localStorage.setItem("token", data.token)
       setCurrentUser(data.user)
     })
   }
 
+  const handleLogout = () => {
+    localStorage.removeItem("token")
+    setCurrentUser(null)
+  }
+
 
   const makeMessage = (words) => {
-    fetch("http://localhost:3000/messages", {
-      method: "POST",
-      headers: {"Content-Type" : "application/json"},
-      body: JSON.stringify({message: words, channel_id: localStorage.getItem("channelId")})
-    })
+    if (!!localStorage.getItem("token")){
+      fetch("http://localhost:3000/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type" : "application/json",
+          "Authentication": `bearer ${localStorage.getItem("token")}`
+        },
+        body: JSON.stringify({message: words, channel_id: localStorage.getItem("channelId")})
+      })
+    }
+    else {
+      alert("you need to sign in")
+    }
   }
 
   const setNewMessage = (event) =>  {
@@ -175,6 +188,20 @@ const App = (props) => {
     else if (response.message) {
       setCurrentChannel(prevState => ({...prevState, messages: [...prevState.messages, response.message.message_info]}))
     }
+  }
+
+  const fetchUser = async () => {
+    //make this dynamic
+    // localStorage.setItem("channelId", 12) //hardsetting localStorage, make sure number is set properly
+    const meta = {
+      headers: {
+        "Authentication": `Bearer ${localStorage.getItem("token")}`
+      }
+    }
+    const res = await fetch(`http://localhost:3000/login/user`, meta)
+
+    const data = await res.json()
+    setCurrentUser(data.user)
   }
 
   const getOldMessages = async () => {
@@ -196,10 +223,15 @@ const App = (props) => {
 
   const setMyChannel = (channel) => {
     localStorage.setItem("channelId", channel.id)
+    //listen 
     getOldMessages()
   }
 
   useEffect(() => {
+
+    if (!!localStorage.getItem("token")){
+      fetchUser()
+    }
 
     const stay = async () => {
       await getOldMessages()
@@ -209,11 +241,17 @@ const App = (props) => {
 
     getChannels()
 
-    const socket = openWebSocket(cableURL, "ChannelChannel")
+    const arr= [12,13]
 
-    socket.onmessage = event => {
-      setNewMessage(event)
-    }
+    arr.map(channelId => {
+      const socket = openWebSocket(cableURL, channelId)
+
+      socket.onmessage = event => {
+        setNewMessage(event)
+      }
+
+    })
+
 
   },[])
 
@@ -223,7 +261,7 @@ const App = (props) => {
           <img src= {logo} style={{maxWidth: "8%"}}/>
       </Typography> */}
 
-      <DrawerAndNav handleLoginOpen={handleLoginOpen} channels={allChannels} setChannel={setMyChannel}/> 
+      <DrawerAndNav handleLoginOpen={handleLoginOpen} handleLogout={handleLogout} channels={allChannels} setChannel={setMyChannel}/> 
       <main className={classes.content}>
         <div className={classes.toolbar} />
           <Container 
@@ -244,7 +282,7 @@ const App = (props) => {
                 </ThemeProvider>
               </Modal>
               {/* right side */}
-              <ChatRoom classes={classes} makeMessage={makeMessage} messages={currentChannel.messages} />
+              <ChatRoom classes={classes} makeMessage={makeMessage} messages={currentChannel.messages} currentUser={currentUser} />
             </Grid>   
           </Container>
         </main>
