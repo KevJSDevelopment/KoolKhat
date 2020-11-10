@@ -83,23 +83,6 @@ const Welcome = (props) => {
 
   }
 
-  const login = (event) => {
-    event.preventDefault()
-    fetch(`http://localhost:3000/login/${event.target[0].value}`, {
-      method: "POST",
-      headers: {
-        "Content-Type" : "application/json"
-      },
-      body: JSON.stringify({username: event.target[0].value, password: event.target[1].value})
-    })
-    .then(res => res.json())
-    .then(data => {
-      console.log(data)
-      localStorage.setItem("token", data.token)
-    })
-    setLoginOpen(false);
-  }
-
   return (
     <div>
       <AppBar
@@ -118,15 +101,9 @@ const Welcome = (props) => {
               </Typography>
             </Grid>
           </Grid>
-          {!!localStorage.getItem("token") && localStorage.getItem("token") != "undefined" ? 
-          <Button onClick={handleLogout} className={classes.login}>
-            logout
-          </Button>
-            :
           <Button onClick={handleLoginOpen} className={classes.login}>
             login
           </Button>
-          }
         </Toolbar>
       </AppBar>
 
@@ -137,7 +114,7 @@ const Welcome = (props) => {
         aria-describedby="simple-modal-description"
         >
           <ThemeProvider theme={loginTheme}>
-            <Login classes={classes} login={login} handleLoginClose={handleLoginClose}/>
+            <Login classes={classes} login={props.login} handleLoginClose={handleLoginClose}/>
           </ThemeProvider>
       </Modal>
 

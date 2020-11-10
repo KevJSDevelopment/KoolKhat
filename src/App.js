@@ -13,7 +13,6 @@ import logo from "./images/loginbackground.png"
 import DrawerAndNav from "./drawerAndNav"
 
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     background: "#819ca9", //light blue
@@ -75,10 +74,11 @@ const App = (props) => {
   //hooks
   const classes = useStyles();
 
-  const [currentUser, setCurrentUser] = useState(null)
   const [allChannels, setAllChannels] = useState([])
   const [currentChannel, setCurrentChannel] = useState({channel: {}, messages: []})
   const [loginOpen, setLoginOpen] = useState(false);
+  const [loading, setLoading] = useState(true)
+
   // const [currentMessage, setCurrentMessage] = useState({})
   
   /**************************************************************************************************/ 
@@ -112,30 +112,11 @@ const App = (props) => {
       setLoginOpen(false);
   };
 
-  const login = (event) => {
-    event.preventDefault()
-    // debugger
-    fetch(`http://localhost:3000/login/${event.target[0].value}`, {
-      method: "POST",
-      headers: {
-        "Content-Type" : "application/json"
-      },
-      body: JSON.stringify({username: event.target[0].value, password: event.target[1].value})
-    })
-    .then(res => res.json())
-    .then(data => {
-      console.log(data)
-      localStorage.setItem("token", data.token)
-      setCurrentUser(data.user)
-    })
-    setLoginOpen(false);
-  }
-
   const handleLogout = () => {
     localStorage.removeItem("token")
-    setCurrentUser(null)
+    props.setCurrentUser(null)
     setLoginOpen(false);
-
+    props.setToken(false)
   }
 
 
@@ -175,9 +156,10 @@ const App = (props) => {
       }
     }
     const res = await fetch(`http://localhost:3000/login/user`, meta)
-
     const data = await res.json()
-    setCurrentUser(data.user)
+
+    props.setCurrentUser(data.user)
+    setLoading(false)
   }
 
   const getOldMessages = async () => {
@@ -209,33 +191,36 @@ const App = (props) => {
       fetchUser()
     }
 
-    const stay = async () => {
-      await getOldMessages()
-    }
-
-    stay()
-
-    getChannels()
-
-    const arr= [12,13]
-
-    arr.map(channelId => {
-      const socket = openWebSocket(cableURL, channelId)
-
-      socket.onmessage = event => {
-        setNewMessage(event)
+    if (!loading){
+      
+      const stay = async () => {
+        await getOldMessages()
+        console.log("ran");
       }
 
-    })
+      stay()
 
+      getChannels()
 
-  },[])
+      const arr= [12,13]
+
+      arr.map(channelId => {
+        const socket = openWebSocket(cableURL, channelId)
+
+        socket.onmessage = event => {
+          setNewMessage(event)
+        }
+
+      })
+
+      console.log(loading);
+      
+    }
+
+  },[loading])
 
   return (
     <div className= {classes.root}>
-      {/* <Typography variant= "h3">
-          <img src= {logo} style={{maxWidth: "8%"}}/>
-      </Typography> */}
 
       <DrawerAndNav handleLoginOpen={handleLoginOpen} handleLogout={handleLogout} channels={allChannels} setChannel={setMyChannel}/> 
       <main className={classes.content}>
@@ -248,7 +233,7 @@ const App = (props) => {
               {/* left side  */}
 
               {/* right side */}
-              <ChatRoom classes={classes} makeMessage={makeMessage} messages={currentChannel.messages} currentUser={currentUser} />
+              <ChatRoom classes={classes} makeMessage={makeMessage} messages={currentChannel.messages} currentUser={props.currentUser} />
             </Grid>   
           </Container>
         </main>

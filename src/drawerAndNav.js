@@ -21,6 +21,8 @@ import MailIcon from '@material-ui/icons/Mail';
 import { Grid } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal'
 import logo from "./images/Logo.png"
+import AddToQueueIcon from '@material-ui/icons/AddToQueue';
+
 
 const drawerWidth = 180;
 
@@ -149,15 +151,9 @@ const DrawerAndNav = (props) => {
                         </Typography>
                       </Grid>
                     </Grid>
-                      {!!localStorage.getItem("token") && localStorage.getItem("token") != "undefined" ? 
                       <Button onClick={props.handleLogout} className={classes.login}>
                         logout
                       </Button>
-                        :
-                      <Button onClick={props.handleLoginOpen} className={classes.login}>
-                        login
-                      </Button>
-                      }
                 </Toolbar>
             </AppBar>
 
@@ -194,7 +190,12 @@ const DrawerAndNav = (props) => {
                     ))}
                 </List>
                 <Divider />
-                <div style={{textAlign: "center", backgroundColor: "#29434e"}}>Rooms</div>
+                <div style={{textAlign: "center", backgroundColor: "#29434e"}}>
+                  Rooms
+                  <IconButton style={{width: "5%", height: "10%"}}>
+                    <AddToQueueIcon/>
+                  </IconButton>
+                </div>
                 <Divider />
                 <List >
                     {props.channels.map((channel) => (
