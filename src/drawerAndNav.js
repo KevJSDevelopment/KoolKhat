@@ -20,6 +20,7 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import { Grid } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal'
+import logo from "./images/Logo.png"
 
 const drawerWidth = 180;
 
@@ -137,9 +138,17 @@ const DrawerAndNav = (props) => {
                         <MenuIcon />
                     </IconButton>
 
-                    <Typography variant="h6" >
-                        Kool Khat
-                    </Typography>
+                    <Grid container xs={5} >
+                      <Grid item xs={3} direction="column" style={!open ? {marginLeft: "40%"} : {marginLeft:"0"}}>
+                        <Typography variant="" style={{float:"left", fontSize: "18px", color: "#2bbd7e"}}>
+                          <i>Kool</i> 
+                        </Typography>
+                          <img src={logo} style={{width: "40%"}} alt="logo"/>
+                        <Typography  variant="" style={{fontSize: "18px", color: "#9bffff"}}>
+                          <i>Khat</i>
+                        </Typography>
+                      </Grid>
+                    </Grid>
 
                     <Button onClick={props.handleLoginOpen} className={classes.login}>
                         Login

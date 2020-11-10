@@ -9,10 +9,23 @@ import Paper from '@material-ui/core/Paper'
 import { grid } from '@material-ui/system';
 import ChatRoom from './ChatRoom'
 import iconLogo from "./images/kklogo2.png"
-import logo from "./images/Logo.png"
+import logo from "./images/loginbackground.png"
 import DrawerAndNav from "./drawerAndNav"
 import Modal from '@material-ui/core/Modal'
 import Login from "./Login"
+import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles"
+import { blueGrey } from '@material-ui/core/colors';
+
+const loginTheme = createMuiTheme({
+  palette: {
+    primary:{
+      main: "#000000"
+    },
+    secondary: {
+      main: "#000000",
+    },
+  },
+});
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
     height: "50%",
     background: "whitesmoke",
     backgroundImage: `url(${logo})`,
+    backgroundSize: "auto",
     border: "3px solid white"
   },
   container: {
@@ -207,7 +221,9 @@ const handleLoginClose = () => {
               aria-labelledby="simple-modal-title"
               aria-describedby="simple-modal-description"
               >
-                <Login classes={classes}/>
+                <ThemeProvider theme={loginTheme}>
+                  <Login classes={classes}/>
+                </ThemeProvider>
               </Modal>
               {/* right side */}
               <ChatRoom classes={classes} makeMessage={makeMessage} messages={currentChannel.messages} />
