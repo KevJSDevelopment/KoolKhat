@@ -134,11 +134,28 @@ const App = (props) => {
   
   const handleLoginOpen = () => {
     setLoginOpen(true);
-};
+  };
 
-const handleLoginClose = () => {
-    setLoginOpen(false);
-};
+  const handleLoginClose = () => {
+      setLoginOpen(false);
+  };
+
+  const login = (event) => {
+    event.preventDefault()
+    // debugger
+    fetch(`http://localhost:3000/login/${event.target[0].value}`, {
+      method: "POST",
+      headers: {
+        "Content-Type" : "application/json"
+      },
+      body: JSON.stringify({username: event.target[0].value, password: event.target[1].value})
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data)
+      setCurrentUser(data.user)
+    })
+  }
 
 
   const makeMessage = (words) => {
@@ -162,8 +179,9 @@ const handleLoginClose = () => {
 
   const getOldMessages = async () => {
     //make this dynamic
-    //localStorage.setItem("channelId", 7) //hardsetting localStorage, make sure number is set properly
+    // localStorage.setItem("channelId", 12) //hardsetting localStorage, make sure number is set properly
     const res = await fetch(`http://localhost:3000/channels/${localStorage.getItem("channelId")}`)
+
     const data = await res.json()
     setCurrentChannel((prevState) => ({...prevState, channel: data.channel, messages: data.message_info}))
   }
@@ -222,7 +240,7 @@ const handleLoginClose = () => {
               aria-describedby="simple-modal-description"
               >
                 <ThemeProvider theme={loginTheme}>
-                  <Login classes={classes}/>
+                  <Login classes={classes} login={login} handleLoginClose={handleLoginClose}/>
                 </ThemeProvider>
               </Modal>
               {/* right side */}

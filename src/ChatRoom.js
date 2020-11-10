@@ -35,6 +35,8 @@ const ChatRoom = (props) => {
 
     useEffect(scrollToBottom, [props.messages]);  
 
+    // debugger
+
     return (
         <Grid container item 
             direction="row"

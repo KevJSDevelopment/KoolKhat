@@ -20,7 +20,10 @@ const Login = (props) => {
 
     return (
         <div className={props.classes.modal} style={{borderRadius: "10%"}}>
-            <form noValidate autoComplete="off">
+            <form noValidate autoComplete="off" onSubmit={(ev) => {
+                props.login(ev)
+                // localStorage.getItem("user") ? props.handleLoginClose() : null
+            }}>
                 <Grid container 
                     direction="column"
                     alignItems="center"
@@ -57,7 +60,7 @@ const Login = (props) => {
                         />
                     </Grid>
                     <Grid item xs={3} style={{margin: "3%", padding:"10px", paddingTop:"0"}}>
-                        <Button>
+                        <Button type="submit">
                             Login
                         </Button>
                     </Grid>
