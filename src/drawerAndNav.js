@@ -149,8 +149,7 @@ const DrawerAndNav = (props) => {
                         </Typography>
                       </Grid>
                     </Grid>
-
-                      { !!localStorage.getItem("token") ? 
+                      {!!localStorage.getItem("token") && localStorage.getItem("token") != "undefined" ? 
                       <Button onClick={props.handleLogout} className={classes.login}>
                         logout
                       </Button>

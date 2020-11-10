@@ -11,21 +11,8 @@ import ChatRoom from './ChatRoom'
 import iconLogo from "./images/kklogo2.png"
 import logo from "./images/loginbackground.png"
 import DrawerAndNav from "./drawerAndNav"
-import Modal from '@material-ui/core/Modal'
-import Login from "./Login"
-import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles"
-import { blueGrey } from '@material-ui/core/colors';
 
-const loginTheme = createMuiTheme({
-  palette: {
-    primary:{
-      main: "#000000"
-    },
-    secondary: {
-      main: "#000000",
-    },
-  },
-});
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,20 +33,6 @@ const useStyles = makeStyles((theme) => ({
     padding: 0,
     border: 0,
     
-  },
-  modal: {
-    width: '30%',
-    maxWidth: '100vw',
-    maxHeight: '100%',
-    position: 'fixed',
-    top: '25%',
-    left: '35%',
-    overflow: 'auto',
-    height: "50%",
-    background: "whitesmoke",
-    backgroundImage: `url(${logo})`,
-    backgroundSize: "auto",
-    border: "3px solid white"
   },
   container: {
     width: "full",
@@ -130,7 +103,7 @@ const App = (props) => {
     }
     return socket
   }
-  
+
   const handleLoginOpen = () => {
     setLoginOpen(true);
   };
@@ -155,11 +128,14 @@ const App = (props) => {
       localStorage.setItem("token", data.token)
       setCurrentUser(data.user)
     })
+    setLoginOpen(false);
   }
 
   const handleLogout = () => {
     localStorage.removeItem("token")
     setCurrentUser(null)
+    setLoginOpen(false);
+
   }
 
 
@@ -271,16 +247,6 @@ const App = (props) => {
             <Grid container >
               {/* left side  */}
 
-              <Modal
-              open={loginOpen}
-              onClose={handleLoginClose}
-              aria-labelledby="simple-modal-title"
-              aria-describedby="simple-modal-description"
-              >
-                <ThemeProvider theme={loginTheme}>
-                  <Login classes={classes} login={login} handleLoginClose={handleLoginClose}/>
-                </ThemeProvider>
-              </Modal>
               {/* right side */}
               <ChatRoom classes={classes} makeMessage={makeMessage} messages={currentChannel.messages} currentUser={currentUser} />
             </Grid>   
