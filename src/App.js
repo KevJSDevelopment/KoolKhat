@@ -1,16 +1,24 @@
 import './App.css';
 import React, { useEffect, useState } from 'react'
-import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
-import { grid } from '@material-ui/system';
 import ChatRoom from './ChatRoom'
-import Info from './Info';
-import logo from "./images/kklogo2.png"
 import DrawerAndNav from "./drawerAndNav"
+import Modal from '@material-ui/core/Modal'
+import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles"
+import NewChannel from './NewChannel'
+
+const loginTheme = createMuiTheme({
+  palette: {
+    primary:{
+      main: "#000000"
+    },
+    secondary: {
+      main: "#000000",
+    },
+  },
+});
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,9 +29,7 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: "100%",
     height: window.innerHeight,
     flexGrow: 1,
-    display: 'flex',
-    
-
+    display: 'flex'
   },
   paper: {
     background: "#29434e", //dark blue
@@ -40,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: 20,
     border: 0,
     align: "center"
-    
   },
   form:{
     align: "center"
@@ -50,7 +55,6 @@ const useStyles = makeStyles((theme) => ({
   },
   chatSpace: {
     background: "#819ca9",
-    // padding 10,
   },
   toolbar: {
     display: 'flex',
@@ -75,39 +79,71 @@ const App = (props) => {
   //hooks
   const classes = useStyles();
 
-  const [currentUser, setCurrentUser] = useState(null)
+  
   const [allChannels, setAllChannels] = useState([])
   const [currentChannel, setCurrentChannel] = useState({channel: {}, messages: []})
-  const [currentMessage, setCurrentMessage] = useState({})
+  // const [currentlySubscribed, setCurrentlySubscribed] = useState(props.currentUser.channels)
+  // const [loginOpen, setLoginOpen] = useState(false);
+  // const [loading, setLoading] = useState(true)
+  
+  // const [currentMessage, setCurrentMessage] = useState({})
   
   /**************************************************************************************************/ 
-
-  const openWebSocket = (webSocketUrl, channel) => {
+  
+  
+  const openWebSocket = (webSocketUrl, channelId) => {
     const socket = (new WebSocket(webSocketUrl))
     socket.onopen = event => {
-      console.log("rocket socket!!")
+      // console.log("rocket socket!!")
+      
+      const meta = {
+          id: channelId,
+          // change me!!!!
+          channel: "ChannelChannel"
 
+      }
       const msg = JSON.stringify({
         command: "subscribe",
-        identifier: JSON.stringify({
-          id: 7,
-          // change me!!!!
-          channel: channel
-        })
+        identifier: JSON.stringify(meta)
       })
 
       socket.send(msg)
     }
     return socket
   }
-  
+
+  const [newChannelOpen, setNewChannelOpen] = useState(false);
+
+  const handleNewChannelOpen = () => {
+    setNewChannelOpen(true);
+  };
+
+  const handleNewChannelClose = () => {
+    setNewChannelOpen(false);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token")
+    props.setCurrentUser(null)
+    // setLoginOpen(false);
+    props.setToken(false)
+  }
+
 
   const makeMessage = (words) => {
-    fetch("http://localhost:3000/messages", {
-      method: "POST",
-      headers: {"Content-Type" : "application/json"},
-      body: JSON.stringify({message: words})
-    })
+    if (!!localStorage.getItem("token")){
+      fetch("http://localhost:3000/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type" : "application/json",
+          "Authentication": `bearer ${localStorage.getItem("token")}`
+        },
+        body: JSON.stringify({message: words, channel_id: localStorage.getItem("channelId")})
+      })
+    }
+    else {
+      alert("you need to sign in")
+    }
   }
 
   const setNewMessage = (event) =>  {
@@ -121,49 +157,141 @@ const App = (props) => {
     }
   }
 
+  const fetchUser = async () => {
+    //make this dynamic
+    // localStorage.setItem("channelId", 12) //hardsetting localStorage, make sure number is set properly
+    const meta = {
+      headers: {
+        "Authentication": `Bearer ${localStorage.getItem("token")}`
+      }
+    }
+    const res = await fetch(`http://localhost:3000/login/user`, meta)
+    const data = await res.json()
+
+    props.setCurrentUser(data.user)
+    // setLoading(false)
+  }
+
   const getOldMessages = async () => {
-    const res = await fetch("http://localhost:3000/channels/1")
+    //make this dynamic
+    // localStorage.setItem("channelId", 12) //hardsetting localStorage, make sure number is set properly
+    const res = await fetch(`http://localhost:3000/channels/${localStorage.getItem("channelId")}`)
+    
     const data = await res.json()
     setCurrentChannel((prevState) => ({...prevState, channel: data.channel, messages: data.message_info}))
   }
 
+  const getChannels = () => {
+    fetch(`http://localhost:3000/channels`)
+      .then(res => res.json())
+      .then(channels => {
+        setAllChannels(channels)
+    })
+  }
+
+  const setMyChannel = (channel) => {
+    // if(!currentlySubscribed.includes(channel.id)){
+      const socket = openWebSocket(cableURL, channel.id)
+  
+      socket.onmessage = event => {
+        setNewMessage(event)
+      }
+    // }
+    localStorage.setItem("channelId", channel.id)
+    getOldMessages()
+  }
+
+  const createNewChannel = (ev) => {
+    ev.preventDefault()
+    
+    fetch("http://localhost:3000/channels", {
+      method: "POST",
+      headers: {"Content-Type" : "application/json"},
+      body: JSON.stringify({name: ev.target[0].value })
+    })
+    .then(res => res.json())
+    .then(async (channelInfo) => {
+      if(channelInfo === "failed"){
+        alert("Could not create channel")
+      }
+      else {
+        const socket = openWebSocket(cableURL, channelInfo.id)
+        
+        socket.onmessage = event => {
+          setNewMessage(event)
+        }
+        await setAllChannels(prevState => ([...prevState, channelInfo]))
+        // await setCurrentlySubscribed(prevState => ([...prevState, channelInfo.id]))
+        localStorage.setItem("channelId", channelInfo.id)
+        getOldMessages()
+        handleNewChannelClose()
+      }
+    })
+  }
+
   useEffect(() => {
 
-    const stay = async () => {
-      await getOldMessages()
+    if (!!localStorage.getItem("token")){
+      fetchUser()
     }
 
-    stay()
+    // if (!loading){
+      
+      const stay = async () => {
+        await getOldMessages()
+        console.log("ran");
+      }
 
-    const socket = openWebSocket(cableURL, "ChannelChannel")
+      stay()
 
-    socket.onmessage = event => {
-      setNewMessage(event)
-    }
+      getChannels()
+
+      const arr= [13,14]//currentlySubscribed// adjust to current channels
+
+      arr.map(channelId => {
+        localStorage.setItem("channelId", arr[0])
+        const socket = openWebSocket(cableURL, channelId)
+
+        socket.onmessage = event => {
+          setNewMessage(event)
+        }
+        return arr;
+      })
+
+      // console.log(loading);
+      
+    // }
 
   },[])
 
   return (
     <div className= {classes.root}>
-      {/* <Typography variant= "h3">
-          <img src= {logo} style={{maxWidth: "8%"}}/>
-      </Typography> */}
 
-      <DrawerAndNav /> 
+      <DrawerAndNav handleNewChannelOpen={handleNewChannelOpen} handleLogout={handleLogout} channels={allChannels} setChannel={setMyChannel}/> 
       <main className={classes.content}>
         <div className={classes.toolbar} />
           <Container 
           className= {classes.container} 
           maxWidth= 'xl' 
           >
-            <Grid container >
+            <Grid container direction="row">
               {/* left side  */}
 
               {/* right side */}
-              <ChatRoom classes={classes} makeMessage={makeMessage} messages={currentChannel.messages} />
+              <ChatRoom classes={classes} makeMessage={makeMessage} messages={currentChannel.messages} currentUser={props.currentUser} channel={currentChannel.channel}/>
             </Grid>   
           </Container>
         </main>
+        <Modal
+        open={newChannelOpen}
+        onClose={handleNewChannelClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        >
+          <ThemeProvider theme={loginTheme}>
+            <NewChannel createNewChannel={createNewChannel}/> 
+          </ThemeProvider>
+      </Modal>
     </div>
   );
 }
