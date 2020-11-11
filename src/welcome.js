@@ -5,13 +5,16 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button'
-import { Grid } from '@material-ui/core';
+import { Container, Grid, Paper } from '@material-ui/core';
 import logo from "./images/Logo.png"
 import backgroundLogo from "./images/loginbackground.png"
 import Modal from '@material-ui/core/Modal'
 import Login from "./Login"
 import Signup from "./Signup"
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles"
+import bubbles from "./images/kklogo4.png"
+import blend from "./images/kklogo5.png"
+import betterBubbles from "./images/bubbles.png"
 
 const loginTheme = createMuiTheme({
   palette: {
@@ -26,7 +29,10 @@ const loginTheme = createMuiTheme({
 
 
 const useStyles = makeStyles((theme) => ({
-  appBar: {
+  root:{
+    overflowY: "auto",
+    overflowX: "hidden"
+  },appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
@@ -70,6 +76,41 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: "auto",
     border: "3px solid white"
   },
+  container:{
+    margin: "0",
+    padding: "0",
+    width: "full",
+    maxWidth: 'xl',
+    backgroundColor: "whitesmoke",
+    // overflowY: "auto",
+    // overflowX: "hidden"
+  },
+  banner:{
+    width: "100%", 
+    color: "#9bffff",
+    height: window.innerHeight/1.5,
+    borderRadius: "0 0 100% 100%",
+    backgroundImage: `url(${betterBubbles})`,
+    backgroundSize: "100%",
+    
+    
+  },
+  overBanner:{
+    backgroundColor: "#29434e", 
+    width: "100%", 
+    color: "#9bffff",
+    height: window.innerHeight/1.5,
+    borderRadius: "0 0 100% 100%",
+    // backgroundImage: `url(${blend})`,
+    backgroundSize: "100%"
+
+  },
+  body: {
+    height: window.innerHeight,
+  },
+  extra:{
+    height: "400px"
+  }
 }));
 
 
@@ -98,7 +139,7 @@ const Welcome = (props) => {
   
 
   return (
-    <div>
+    <div >
       <AppBar
       position="fixed"
       className={clsx(classes.appBar)} 
@@ -125,6 +166,44 @@ const Welcome = (props) => {
           </Grid>
         </Toolbar>
       </AppBar>
+      <br/>
+      <br/>
+      <br/>
+      <Container className={classes.container} maxWidth= 'xl' >
+        <div className={classes.overBanner} >
+          <div className={classes.banner} >
+            <br/>
+            <Grid container xs={12} direction="row" >
+              <Grid item xs={12} direction="column">
+                <Typography variant="h1" style={{marginLeft: "-20%" ,color: "#2bbd7e"}}>
+                  <i>Kool</i> 
+                </Typography>
+                  <img src={logo} style={{marginLeft: "42%", width: "15%"}} alt="logo"/>
+                <Typography  variant="h1" style={{marginRight: "-20%", color: "#9bffff"}}>
+                  <i>Khat</i>
+                </Typography>
+              </Grid>
+            </Grid>
+          </div>
+        </div>
+        <div className={classes.body}>
+
+        </div>
+        <Grid container className={classes.extra}>
+          <Grid item>
+            <Paper style={{height: "400px"}}>
+              yo
+            </Paper>
+          </Grid>
+        </Grid>
+        <Grid container>
+          <Grid item>
+              
+          </Grid>
+        </Grid>
+      </Container>
+
+
 
       <Modal
         open={loginOpen}

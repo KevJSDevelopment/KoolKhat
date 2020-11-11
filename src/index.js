@@ -16,8 +16,11 @@ const theme = createMuiTheme({
       //for any general settings to be added accross the website
       h3: {
         textAlign: "center"
-      }
-
+      },
+      h1:{
+        textAlign: "center"
+      },
+      fontFamily: '"Segoe UI"'
   },
   palette: {
     primary: {
@@ -27,16 +30,14 @@ const theme = createMuiTheme({
       main: "#9fffe0" //Another orange-ish color
     }
   },
-  fontFamily: 'roboto' // as an aside, highly recommend importing roboto font for Material UI projects! Looks really nice
+  fontFamily: ""           // as an aside, highly recommend importing roboto font for Material UI projects! Looks really nice
 });
 
 ReactDOM.render(
   <ThemeProvider 
   theme={theme}>
       <Typography />
-        {/* <BrowserRouter basename={process.env.PUBLIC_URL}> */}
           <Runner />
-        {/* </BrowserRouter> */}
       <Typography />
   </ThemeProvider>,
   document.getElementById("root")

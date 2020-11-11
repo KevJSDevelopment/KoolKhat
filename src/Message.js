@@ -18,7 +18,8 @@ const useStyles = makeStyles((theme) => ({
     },
     text: {
         paddingLeft: "8px",
-        paddingRight: "8px"
+        paddingRight: "8px",
+        fontSize: 14
     }
 }))
 
