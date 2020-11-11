@@ -95,7 +95,7 @@ const Welcome = (props) => {
       setSignupOpen(false);
   };
 
-
+  
 
   return (
     <div>
