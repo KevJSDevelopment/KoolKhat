@@ -19,7 +19,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import { Grid } from '@material-ui/core';
-import Modal from '@material-ui/core/Modal'
+// import Modal from '@material-ui/core/Modal'
 import logo from "./images/Logo.png"
 import AddToQueueIcon from '@material-ui/icons/AddToQueue';
 
@@ -140,13 +140,13 @@ const DrawerAndNav = (props) => {
                         <MenuIcon />
                     </IconButton>
 
-                    <Grid container xs={5} >
-                      <Grid item xs={3} direction="column" style={!open ? {marginLeft: "40%"} : {marginLeft:"0"}}>
-                        <Typography variant="" style={{float:"left", fontSize: "18px", color: "#2bbd7e"}}>
+                    <Grid container direction="column" xs={5} >
+                      <Grid item xs={3} style={!open ? {marginLeft: "40%"} : {marginLeft:"0"}}>
+                        <Typography variant="inherit" style={{float:"left", fontSize: "18px", color: "#2bbd7e"}}>
                           <i>Kool</i> 
                         </Typography>
                           <img src={logo} style={{width: "40%"}} alt="logo"/>
-                        <Typography  variant="" style={{fontSize: "18px", color: "#9bffff"}}>
+                        <Typography  variant="inherit" style={{fontSize: "18px", color: "#9bffff"}}>
                           <i>Khat</i>
                         </Typography>
                       </Grid>
@@ -200,8 +200,10 @@ const DrawerAndNav = (props) => {
                 <List >
                     {props.channels.map((channel) => (
                       <ListItem button key={channel.name} onClick={() => props.setChannel(channel)}>
-                      <ListItemIcon className={classes.list} >  <InboxIcon /> </ListItemIcon>
-                      <ListItemText primary={channel.name} />
+                        <ListItemIcon className={classes.list} >  
+                          <InboxIcon /> 
+                        </ListItemIcon>
+                        <ListItemText primary={channel.name} />
                       </ListItem>
                   ))}
                 </List>

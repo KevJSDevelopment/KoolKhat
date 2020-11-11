@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -77,11 +77,7 @@ const Welcome = (props) => {
       setLoginOpen(false);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token")
-    setLoginOpen(false);
 
-  }
 
   return (
     <div>
@@ -90,13 +86,13 @@ const Welcome = (props) => {
       className={clsx(classes.appBar)} 
       >
         <Toolbar style={{justifyContent: "space-between"}}>
-          <Grid container xs={5} >
+          <Grid container xs={5} direction="row" >
             <Grid item xs={3} direction="column">
-              <Typography variant="" style={{float:"left", fontSize: "18px", color: "#2bbd7e"}}>
+              <Typography variant="inherit" style={{float:"left", fontSize: "18px", color: "#2bbd7e"}}>
                 <i>Kool</i> 
               </Typography>
                 <img src={logo} style={{width: "40%"}} alt="logo"/>
-              <Typography  variant="" style={{fontSize: "18px", color: "#9bffff"}}>
+              <Typography  variant="inherit" style={{fontSize: "18px", color: "#9bffff"}}>
                 <i>Khat</i>
               </Typography>
             </Grid>

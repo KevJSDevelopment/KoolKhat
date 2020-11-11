@@ -2,13 +2,14 @@ import React from 'react'
 import Button from "@material-ui/core/Button"
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
-import { Typography } from '@material-ui/core'
+// import { Typography } from '@material-ui/core'
 import logo from "./images/Logo.png"
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
     label: {
         color: "black",
+        width: "100%"
     },
     focusedLabel: {
         color: "black"
@@ -26,13 +27,13 @@ const Login = (props) => {
             }}>
                 <Grid container 
                     direction="column"
-                    alignItems="center"
+                    // alignItems="center"
                     xs= {12} 
                 >
-                    <Grid container item xs={3} style={{margin: "1%"}} >
-                        <img src={logo} style={{width: "70%", marginLeft: "17px"}}/>
+                    <Grid container item xs={12} style={{margin: "1%"}} direction="row">
+                        <img src={logo} style={{width: "20%", marginLeft: "17px"}} alt="logo"/>
                     </Grid>
-                    <Grid item xs={3} style={{margin: "3%", padding:"10px" , paddingTop:"0px"}} >
+                    <Grid item xs={12} style={{margin: "1%", padding:"10px" , paddingTop:"0px"}} >
                         <TextField 
                         placeholder="" 
                         id="standard-basic" 
@@ -45,7 +46,7 @@ const Login = (props) => {
                         }} 
                         />
                     </Grid>
-                    <Grid item xs={3} style={{margin: "3%", padding:"10px" , paddingTop:"0px"}}>
+                    <Grid item xs={12} style={{margin: "1%", padding:"10px" , paddingTop:"0px"}}>
                         <TextField 
                         id="standard-password-input" 
                         label="Password" 
@@ -59,7 +60,7 @@ const Login = (props) => {
                         }} 
                         />
                     </Grid>
-                    <Grid item xs={3} style={{margin: "3%", padding:"10px", paddingTop:"0"}}>
+                    <Grid item xs={12} style={{margin: "3%", padding:"10px", paddingTop:"0"}}>
                         <Button type="submit">
                             Login
                         </Button>

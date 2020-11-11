@@ -1,15 +1,9 @@
 import './App.css';
 import React, { useEffect, useState } from 'react'
-import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
-import { grid } from '@material-ui/system';
 import ChatRoom from './ChatRoom'
-import iconLogo from "./images/kklogo2.png"
-import logo from "./images/loginbackground.png"
 import DrawerAndNav from "./drawerAndNav"
 
 
@@ -22,9 +16,7 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: "100%",
     height: window.innerHeight,
     flexGrow: 1,
-    display: 'flex',
-    
-
+    display: 'flex'
   },
   paper: {
     background: "#29434e", //dark blue
@@ -76,8 +68,8 @@ const App = (props) => {
 
   const [allChannels, setAllChannels] = useState([])
   const [currentChannel, setCurrentChannel] = useState({channel: {}, messages: []})
-  const [loginOpen, setLoginOpen] = useState(false);
-  const [loading, setLoading] = useState(true)
+  // const [loginOpen, setLoginOpen] = useState(false);
+  // const [loading, setLoading] = useState(true)
 
   // const [currentMessage, setCurrentMessage] = useState({})
   
@@ -87,7 +79,7 @@ const App = (props) => {
     const socket = (new WebSocket(webSocketUrl))
     socket.onopen = event => {
       // console.log("rocket socket!!")
-
+      
       const meta = {
           id: channelId,
           // change me!!!!
@@ -104,18 +96,14 @@ const App = (props) => {
     return socket
   }
 
-  const handleLoginOpen = () => {
-    setLoginOpen(true);
-  };
-
-  const handleLoginClose = () => {
-      setLoginOpen(false);
-  };
+  // const handleLoginOpen = () => {
+  //   setLoginOpen(true);
+  // };
 
   const handleLogout = () => {
     localStorage.removeItem("token")
     props.setCurrentUser(null)
-    setLoginOpen(false);
+    // setLoginOpen(false);
     props.setToken(false)
   }
 
@@ -159,14 +147,14 @@ const App = (props) => {
     const data = await res.json()
 
     props.setCurrentUser(data.user)
-    setLoading(false)
+    // setLoading(false)
   }
 
   const getOldMessages = async () => {
     //make this dynamic
     // localStorage.setItem("channelId", 12) //hardsetting localStorage, make sure number is set properly
     const res = await fetch(`http://localhost:3000/channels/${localStorage.getItem("channelId")}`)
-
+    
     const data = await res.json()
     setCurrentChannel((prevState) => ({...prevState, channel: data.channel, messages: data.message_info}))
   }
@@ -191,7 +179,7 @@ const App = (props) => {
       fetchUser()
     }
 
-    if (!loading){
+    // if (!loading){
       
       const stay = async () => {
         await getOldMessages()
@@ -202,34 +190,35 @@ const App = (props) => {
 
       getChannels()
 
-      const arr= [12,13]
+      const arr= [13,14]
 
       arr.map(channelId => {
+        localStorage.setItem("channelId", arr[0])
         const socket = openWebSocket(cableURL, channelId)
 
         socket.onmessage = event => {
           setNewMessage(event)
         }
-
+        return arr;
       })
 
-      console.log(loading);
+      // console.log(loading);
       
-    }
+    // }
 
-  },[loading])
+  },[])
 
   return (
     <div className= {classes.root}>
 
-      <DrawerAndNav handleLoginOpen={handleLoginOpen} handleLogout={handleLogout} channels={allChannels} setChannel={setMyChannel}/> 
+      <DrawerAndNav handleLogout={handleLogout} channels={allChannels} setChannel={setMyChannel}/> 
       <main className={classes.content}>
         <div className={classes.toolbar} />
           <Container 
           className= {classes.container} 
           maxWidth= 'xl' 
           >
-            <Grid container >
+            <Grid container direction="row">
               {/* left side  */}
 
               {/* right side */}

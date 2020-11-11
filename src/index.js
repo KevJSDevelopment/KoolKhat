@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import { createMuiTheme, Switch, ThemeProvider } from "@material-ui/core";
+// import App from './App';
+import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import 'fontsource-roboto';
 import Typography from '@material-ui/core/Typography'
 import Runner from "./Runner"

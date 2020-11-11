@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
+import React from 'react'
+// import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import { lighten, Typography } from '@material-ui/core';
+// import Container from '@material-ui/core/Container';
+import { Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
-import { grid, width } from '@material-ui/system';
+// import { grid, width } from '@material-ui/system';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 const useStyles = makeStyles((theme) => ({
@@ -27,10 +27,10 @@ const Message = (props) => {
 
     return (
         <div>
-            {props.currentUser.username != props.user.username ?  
+            {props.currentUser.username !== props.user.username ?  
             <Grid container item 
             direction="row"
-            alignItems="top"
+            // alignItems="top"
             xs={12} 
             style={{marginBottom:"1%"}}
             >
@@ -53,7 +53,7 @@ const Message = (props) => {
             : 
             <Grid container item 
             direction="row"
-            alignItems="top"
+            // alignItems="top"
             xs={12} 
             style={{marginBottom:"1%", marginLeft: "51%"}}
             >
@@ -72,7 +72,7 @@ const Message = (props) => {
                 </Grid>
 
                 <Grid item xs={0} style={{margin: 5, marginLeft:"2%", marginRight: 0, padding: 0}}>
-                        <AccountCircleIcon style={{fill: props.user.icon, backgroundColor: props.user.background, borderRadius: "15px"}}/>
+                    <AccountCircleIcon style={{fill: props.user.icon, backgroundColor: props.user.background, borderRadius: "15px"}}/>
                 </Grid>
 
             </Grid>

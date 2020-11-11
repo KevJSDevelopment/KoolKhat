@@ -47,7 +47,8 @@ const ChatRoom = (props) => {
             <Grid item xs= {12}>
                 <Paper elevation={15} className={props.classes.paper} style={{height: window.innerHeight/1.40, overflow: "auto"}}>
                     {props.messages.sort((a,b) => a.data.id - b.data.id ).map(message => {
-                        return <Message message={message.data} user={message.user} key={message.data.id} currentUser={props.currentUser}/>
+                        // console.log(message.data.id)
+                        return <Message message={message.data} user={message.user} currentUser={props.currentUser} key={message.data.id}/>
                     })}
                 <div ref={messagesEndRef} />
                 </Paper>
@@ -58,7 +59,7 @@ const ChatRoom = (props) => {
             >
                 <Paper elevation={15} className={props.classes.paper} style= {{float: "center", width: "auto"}}>
                     <form 
-                    autocomplete= 'off'
+                    autoComplete= 'off'
                     className= {props.classes.form} onSubmit={(e) => {
                             e.preventDefault()
                             if (!e.target[0].value == ""){
