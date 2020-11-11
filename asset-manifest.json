@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/KoolKhat/static/css/main.72e8fed5.chunk.css",
+    "main.js": "/KoolKhat/static/js/main.3205ac28.chunk.js",
+    "main.js.map": "/KoolKhat/static/js/main.3205ac28.chunk.js.map",
+    "runtime-main.js": "/KoolKhat/static/js/runtime-main.1a83ec07.js",
+    "runtime-main.js.map": "/KoolKhat/static/js/runtime-main.1a83ec07.js.map",
+    "static/css/2.e7287426.chunk.css": "/KoolKhat/static/css/2.e7287426.chunk.css",
+    "static/js/2.89677a24.chunk.js": "/KoolKhat/static/js/2.89677a24.chunk.js",
+    "static/js/2.89677a24.chunk.js.map": "/KoolKhat/static/js/2.89677a24.chunk.js.map",
+    "index.html": "/KoolKhat/index.html",
+    "static/css/2.e7287426.chunk.css.map": "/KoolKhat/static/css/2.e7287426.chunk.css.map",
+    "static/css/main.72e8fed5.chunk.css.map": "/KoolKhat/static/css/main.72e8fed5.chunk.css.map",
+    "static/js/2.89677a24.chunk.js.LICENSE.txt": "/KoolKhat/static/js/2.89677a24.chunk.js.LICENSE.txt",
+    "static/media/Logo.bb2c4dae.png": "/KoolKhat/static/media/Logo.bb2c4dae.png",
+    "static/media/loginbackground.47009031.png": "/KoolKhat/static/media/loginbackground.47009031.png",
+    "static/media/index.css": "/KoolKhat/static/media/roboto-vietnamese-400-normal.52cebac0.woff2"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.1a83ec07.js",
+    "static/css/2.e7287426.chunk.css",
+    "static/js/2.89677a24.chunk.js",
+    "static/css/main.72e8fed5.chunk.css",
+    "static/js/main.3205ac28.chunk.js"
+  ]
+}
