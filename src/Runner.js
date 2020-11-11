@@ -20,7 +20,7 @@ const Runner = () => {
         })
         .then(res => res.json())
         .then(data => {
-          console.log(data)
+          // console.log(data)
           localStorage.setItem("token", data.token)
           setCurrentUser(data.user)
           setToken(localStorage.getItem("token"))

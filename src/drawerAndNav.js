@@ -192,12 +192,15 @@ const DrawerAndNav = (props) => {
                 <Divider />
                 <div style={{textAlign: "center", backgroundColor: "#29434e"}}>
                   Rooms
-                  <IconButton style={{width: "5%", height: "10%"}}>
-                    <AddToQueueIcon/>
-                  </IconButton>
                 </div>
                 <Divider />
-                <List >
+                <List style={{overflow: "auto", height: "35%"}}>
+                  <ListItem button onClick={() => props.handleNewChannelOpen()}>
+                    <ListItemIcon >
+                          <AddToQueueIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary={"New Room"}/>
+                  </ListItem>
                     {props.channels.map((channel) => (
                       <ListItem button key={channel.name} onClick={() => props.setChannel(channel)}>
                         <ListItemIcon className={classes.list} >  
