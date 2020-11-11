@@ -10,6 +10,7 @@ import logo from "./images/Logo.png"
 import backgroundLogo from "./images/loginbackground.png"
 import Modal from '@material-ui/core/Modal'
 import Login from "./Login"
+import Signup from "./Signup"
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles"
 
 const loginTheme = createMuiTheme({
@@ -45,6 +46,14 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#29434e",
     '&:hover': {
       backgroundColor: "#2bbd7e",
+    }
+  },
+  signUp: {
+    color: "#FFFFFF",
+    backgroundColor: "#29434e",
+    '&:hover': {
+      backgroundColor: "#22d5db",
+      color: "black"
     },
   },
   modal: {
@@ -68,6 +77,7 @@ const Welcome = (props) => {
   const classes = useStyles();
     
   const [loginOpen, setLoginOpen] = useState(false);
+  const [signupOpen, setSignupOpen] = useState(false);
 
   const handleLoginOpen = () => {
     setLoginOpen(true);
@@ -75,6 +85,14 @@ const Welcome = (props) => {
 
   const handleLoginClose = () => {
       setLoginOpen(false);
+  };
+
+  const handleSignupOpen = () => {
+    setSignupOpen(true);
+  };
+
+  const handleSignupClose = () => {
+      setSignupOpen(false);
   };
 
 
@@ -97,9 +115,14 @@ const Welcome = (props) => {
               </Typography>
             </Grid>
           </Grid>
-          <Button onClick={handleLoginOpen} className={classes.login}>
-            login
-          </Button>
+          <Grid item>
+            <Button onClick={handleSignupOpen} className={classes.signUp}>
+              Sign up
+            </Button>
+            <Button onClick={handleLoginOpen} className={classes.login}>
+              Login
+            </Button>
+          </Grid>
         </Toolbar>
       </AppBar>
 
@@ -114,16 +137,19 @@ const Welcome = (props) => {
           </ThemeProvider>
       </Modal>
 
+      <Modal
+        open={signupOpen}
+        onClose={handleSignupClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        >
+          <ThemeProvider theme={loginTheme}>
+            <Signup classes={classes} signup={props.signup} handleSignupClose={handleSignupClose}/>
+          </ThemeProvider>
+      </Modal>
+
     </div>
   );
 }
 
 export default Welcome
-
-
-
-
-
-
-
-

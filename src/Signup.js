@@ -12,24 +12,24 @@ const useStyles = makeStyles((theme) => ({
         width: "100%"
     },
     focusedLabel: {
-        color: "black"
+        color: "#22d5db"
     },
     button:{
-        
+
         '&:hover': {
-            backgroundColor: "#2bbd7e",
-            color: "white"
+            backgroundColor: "#22d5db",
+            color: "black"
           },
     }
 }))
 
-const Login = (props) => {
+const Signup = (props) => {
     const classes = useStyles();
 
     return (
         <div className={props.classes.modal} style={{borderRadius: "10%"}}>
             <form noValidate autoComplete="off" onSubmit={(ev) => {
-                props.login(ev)
+                props.signup(ev)
                 // localStorage.getItem("user") ? props.handleLoginClose() : null
             }}>
                 <Grid container 
@@ -69,7 +69,7 @@ const Login = (props) => {
                     </Grid>
                     <Grid item xs={12} style={{margin: "3%", padding:"10px", paddingTop:"0"}}>
                         <Button type="submit" className= {classes.button}>
-                            Login
+                            Signup
                         </Button>
                     </Grid>
                 </Grid>
@@ -78,4 +78,4 @@ const Login = (props) => {
     )
 }
 
-export default Login
+export default Signup

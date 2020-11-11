@@ -27,6 +27,28 @@ const Runner = () => {
         })
     }
 
+    const signup = (event) => {
+        event.preventDefault()
+
+        const meta = {
+            method: "POST",
+            headers: {
+              "Content-Type" : "application/json"
+            },
+            body: JSON.stringify({username: event.target[0].value, password: event.target[1].value}) 
+        }
+
+        fetch(`http://localhost:3000/users`, meta)
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+            localStorage.setItem("token", data.token)
+            setCurrentUser(data.user)
+            setToken(localStorage.getItem("token"))
+        })
+
+    }
+
     const changeToken = (change) => {
         setToken(change)
     }
@@ -35,7 +57,7 @@ const Runner = () => {
         <Router>
             <Switch>
             {/* <Route exact path="/" component={() => <App setToken={changeToken} currentUser={currentUser} setCurrentUser={setCurrentUser}/>}/> */}
-              <Route exact path="/" render={()=> !!token ? <Redirect to='/khat' /> : <Welcome setToken={changeToken} login={login} />} />
+              <Route exact path="/" render={()=> !!token ? <Redirect to='/khat' /> : <Welcome setToken={changeToken} login={login} signup={signup}/>} />
               <Route exact path="/khat" render={() => !!token ? <App setToken={changeToken} currentUser={currentUser} setCurrentUser={setCurrentUser} /> : <Redirect to='/'/>} />
 
               {/* <Route exact path="/" render={() => this.state.searchedSchool ? <Redirect to='/listings'/> : <Body handleChange={this.handleChange} />} />
