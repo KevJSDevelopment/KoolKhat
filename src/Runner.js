@@ -11,7 +11,7 @@ const Runner = () => {
     const login = (event) => {
         event.preventDefault()
         // debugger
-        fetch(`http://localhost:3000/login/${event.target[0].value}`, {
+        fetch(`https://stormy-savannah-56656.herokuapp.com/login/${event.target[0].value}`, {
           method: "POST",
           headers: {
             "Content-Type" : "application/json"
@@ -38,7 +38,7 @@ const Runner = () => {
             body: JSON.stringify({username: event.target[0].value, password: event.target[1].value}) 
         }
 
-        fetch(`http://localhost:3000/users`, meta)
+        fetch(`https://stormy-savannah-56656.herokuapp.com/users`, meta)
         .then(res => res.json())
         .then(data => {
             console.log(data)

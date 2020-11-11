@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
 
 const App = (props) => {
   //globals
-  const cableURL = "ws://localhost:3000/cable"
+  const cableURL = "wss://stormy-savannah-56656.herokuapp.com/cable"
 
   //hooks
   const classes = useStyles();
@@ -132,7 +132,7 @@ const App = (props) => {
 
   const makeMessage = (words) => {
     if (!!localStorage.getItem("token")){
-      fetch("http://localhost:3000/messages", {
+      fetch("https://stormy-savannah-56656.herokuapp.com/messages", {
         method: "POST",
         headers: {
           "Content-Type" : "application/json",
@@ -165,7 +165,7 @@ const App = (props) => {
         "Authentication": `Bearer ${localStorage.getItem("token")}`
       }
     }
-    const res = await fetch(`http://localhost:3000/login/user`, meta)
+    const res = await fetch(`https://stormy-savannah-56656.herokuapp.com/login/user`, meta)
     const data = await res.json()
 
     props.setCurrentUser(data.user)
@@ -175,14 +175,14 @@ const App = (props) => {
   const getOldMessages = async () => {
     //make this dynamic
     // localStorage.setItem("channelId", 12) //hardsetting localStorage, make sure number is set properly
-    const res = await fetch(`http://localhost:3000/channels/${localStorage.getItem("channelId")}`)
+    const res = await fetch(`https://stormy-savannah-56656.herokuapp.com/channels/${localStorage.getItem("channelId")}`)
     
     const data = await res.json()
     setCurrentChannel((prevState) => ({...prevState, channel: data.channel, messages: data.message_info}))
   }
 
   const getChannels = () => {
-    fetch(`http://localhost:3000/channels`)
+    fetch(`https://stormy-savannah-56656.herokuapp.com/channels`)
       .then(res => res.json())
       .then(channels => {
         setAllChannels(channels)
@@ -204,7 +204,7 @@ const App = (props) => {
   const createNewChannel = (ev) => {
     ev.preventDefault()
     
-    fetch("http://localhost:3000/channels", {
+    fetch("https://stormy-savannah-56656.herokuapp.com/channels", {
       method: "POST",
       headers: {"Content-Type" : "application/json"},
       body: JSON.stringify({name: ev.target[0].value })
