@@ -186,19 +186,27 @@ const App = (props) => {
   const getChannels = () => {
     fetch(`https://stormy-savannah-56656.herokuapp.com/channels`)
       .then(res => res.json())
-      .then(channels => {
-        setAllChannels(channels)
+      .then(async (channels) => {
+        // debugger
+        await setAllChannels(channels)
+        subscribeToChannels(channels)
+    })
+  }
+
+  const subscribeToChannels = (channels) => {
+    const arr = channels //currentlySubscribed// adjust to current channels
+    arr.map(channel => {
+      // debugger
+      localStorage.setItem("channelId", arr[0].id)
+      const socket = openWebSocket(cableURL, channel.id)
+
+      socket.onmessage = event => {
+        setNewMessage(event)
+      }
     })
   }
 
   const setMyChannel = (channel) => {
-    // if(!currentlySubscribed.includes(channel.id)){
-      const socket = openWebSocket(cableURL, channel.id)
-  
-      socket.onmessage = event => {
-        setNewMessage(event)
-      }
-    // }
     localStorage.setItem("channelId", channel.id)
     getOldMessages()
   }
@@ -236,33 +244,21 @@ const App = (props) => {
     if (!!localStorage.getItem("token")){
       fetchUser()
     }
+    
+    const awaitChannels = async () => {
+      await getChannels()
+      return;
+    }
 
-    // if (!loading){
-      
-      const stay = async () => {
-        await getOldMessages()
-        console.log("ran");
-      }
+    const stay = async () => {
+      await getOldMessages()
+      // console.log("ran");
+    }
 
-      stay()
+    awaitChannels()
 
-      getChannels()
+    stay()
 
-      const arr= [1,2]//currentlySubscribed// adjust to current channels
-      // debu
-      arr.map(channelId => {
-        localStorage.setItem("channelId", arr[0])
-        const socket = openWebSocket(cableURL, channelId)
-
-        socket.onmessage = event => {
-          setNewMessage(event)
-        }
-        return arr;
-      })
-
-      // console.log(loading);
-      
-    // }
 
   },[])
 

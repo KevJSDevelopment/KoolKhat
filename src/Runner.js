@@ -59,7 +59,6 @@ const Runner = () => {
             {/* <Route exact path="/" component={() => <App setToken={changeToken} currentUser={currentUser} setCurrentUser={setCurrentUser}/>}/> */}
               <Route exact path="/KoolKhat/" render={()=> !!token ? <Redirect to='/KoolKhat/khat' /> : <Welcome setToken={changeToken} login={login} signup={signup}/>} />
               <Route exact path="/KoolKhat/khat" render={() => !!token ? <App setToken={changeToken} currentUser={currentUser} setCurrentUser={setCurrentUser} /> : <Redirect to='/KoolKhat/'/>} />
-
               {/* <Route exact path="/" render={() => this.state.searchedSchool ? <Redirect to='/listings'/> : <Body handleChange={this.handleChange} />} />
               <Route exact path="/listings" render={() => <ListingsPage searchedSchool={this.state.searchedSchool} listingsData={this.state.listingsData} />} /> */}
             </Switch>
