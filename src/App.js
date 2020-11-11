@@ -166,6 +166,7 @@ const App = (props) => {
       }
     }
     const res = await fetch(`https://stormy-savannah-56656.herokuapp.com/login/user`, meta)
+    // debugger
     const data = await res.json()
 
     props.setCurrentUser(data.user)
@@ -177,6 +178,7 @@ const App = (props) => {
     // localStorage.setItem("channelId", 12) //hardsetting localStorage, make sure number is set properly
     const res = await fetch(`https://stormy-savannah-56656.herokuapp.com/channels/${localStorage.getItem("channelId")}`)
     
+    // debugger
     const data = await res.json()
     setCurrentChannel((prevState) => ({...prevState, channel: data.channel, messages: data.message_info}))
   }
@@ -246,8 +248,8 @@ const App = (props) => {
 
       getChannels()
 
-      const arr= [13,14]//currentlySubscribed// adjust to current channels
-
+      const arr= [1,2]//currentlySubscribed// adjust to current channels
+      // debu
       arr.map(channelId => {
         localStorage.setItem("channelId", arr[0])
         const socket = openWebSocket(cableURL, channelId)
