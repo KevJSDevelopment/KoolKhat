@@ -23,6 +23,7 @@ import { Grid } from '@material-ui/core';
 import logo from "./images/Logo.png"
 import AddToQueueIcon from '@material-ui/icons/AddToQueue';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
+import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 
 
 const drawerWidth = 180;
@@ -100,6 +101,10 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: "#2bbd7e",
     },
+  },
+  settings:{
+    overflow: "auto",
+    color: "white"
   }
 
 }));
@@ -223,6 +228,14 @@ const DrawerAndNav = (props) => {
                     Settings
                   </div>
                 <Divider />
+                <List className={classes.settings} >
+                  <ListItem button onClick={() => {props.handleProfileOpen()}}>
+                    <ListItemIcon >
+                          <AccessibilityNewIcon style={{fill: "#9bffff"}}/>
+                    </ListItemIcon>
+                    <ListItemText primary={"Change Profile"}/>
+                  </ListItem>
+                </List>
             </Drawer>
         </div>
     )

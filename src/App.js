@@ -8,6 +8,7 @@ import DrawerAndNav from "./drawerAndNav"
 import Modal from '@material-ui/core/Modal'
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles"
 import NewChannel from './NewChannel'
+import EditProfile from "./EditProfile"
 
 const loginTheme = createMuiTheme({
   palette: {
@@ -82,6 +83,8 @@ const App = (props) => {
   
   const [allChannels, setAllChannels] = useState([])
   const [currentChannel, setCurrentChannel] = useState({channel: {}, messages: [], users: []})
+  const [newChannelOpen, setNewChannelOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   
   /**************************************************************************************************/ 
   
@@ -105,7 +108,7 @@ const App = (props) => {
     return socket
   }
 
-  const [newChannelOpen, setNewChannelOpen] = useState(false);
+
 
   const handleNewChannelOpen = () => {
     setNewChannelOpen(true);
@@ -115,11 +118,22 @@ const App = (props) => {
     setNewChannelOpen(false);
   };
 
+  const handleProfileOpen = () => {
+    setProfileOpen(true);
+  };
+
+  const handleProfileClose = () => {
+    setProfileOpen(false);
+  };
+
+
+
   const handleLogout = () => {
     localStorage.removeItem("token")
     props.setCurrentUser(null)
     props.setToken(false)
   }
+
 
 
   const makeMessage = (words) => {
@@ -197,6 +211,35 @@ const App = (props) => {
     getOldMessages()
   }
 
+  const changeProfile = (ev) => {
+    ev.preventDefault()
+
+    const meta = {
+      method: "PATCH",
+      headers: {
+        "Authentication": `Bearer ${localStorage.getItem("token")}`
+      },
+      body: JSON.stringify({
+        background: ev.target[1].value,
+        icon: ev.target[0].value,
+      })
+    }
+
+
+    fetch(`http://localhost:3000/users/${props.currentUser.id}`, meta)    
+    .then(res => res.json())
+    .then(async (data) => {
+      if (data.auth){
+        await props.setCurrentUser(data.user)
+        handleProfileClose()
+        console.log(data);
+      }
+      else{
+        alert(data.info)
+      }
+    })
+  }
+
   const createNewChannel = (ev) => {
     ev.preventDefault()
     
@@ -243,13 +286,12 @@ const App = (props) => {
 
     stay()
 
-
   },[])
 
   return (
     <div className= {classes.root}>
 
-      <DrawerAndNav handleNewChannelOpen={handleNewChannelOpen} handleLogout={handleLogout} channels={allChannels} users={currentChannel.users} setChannel={setMyChannel}/> 
+      <DrawerAndNav handleNewChannelOpen={handleNewChannelOpen} handleLogout={handleLogout} channels={allChannels} users={currentChannel.users} setChannel={setMyChannel} handleProfileOpen={handleProfileOpen}/> 
       <main className={classes.content}>
         <div className={classes.toolbar} />
           <Container 
@@ -257,9 +299,6 @@ const App = (props) => {
           maxWidth= 'xl' 
           >
             <Grid container direction="row">
-              {/* left side  */}
-
-              {/* right side */}
               <ChatRoom classes={classes} makeMessage={makeMessage} messages={currentChannel.messages} currentUser={props.currentUser} channel={currentChannel.channel}/>
             </Grid>   
           </Container>
@@ -272,6 +311,17 @@ const App = (props) => {
         >
           <ThemeProvider theme={loginTheme}>
             <NewChannel createNewChannel={createNewChannel}/> 
+          </ThemeProvider>
+      </Modal>
+
+      <Modal
+        open={profileOpen}
+        onClose={handleProfileClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        >
+          <ThemeProvider theme={loginTheme}>
+            <EditProfile changeProfile={changeProfile}/> 
           </ThemeProvider>
       </Modal>
     </div>
