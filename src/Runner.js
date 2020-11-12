@@ -19,13 +19,13 @@ const Runner = () => {
           body: JSON.stringify({username: event.target[0].value, password: event.target[1].value})
         })
         .then(res => res.json())
-        .then(data => {
-          // console.log(data)
-          // debugger
+        .then(async (data) => {
           if(data.auth){
-            localStorage.setItem("token", data.token)
-            setCurrentUser(data.user)
-            setToken(localStorage.getItem("token"))
+            await setTimeout( () => {
+              localStorage.setItem("token", data.token)
+              setCurrentUser(data.user)
+              setToken(localStorage.getItem("token"))
+            }, 0)
           }
           else {
             alert(data.info)
@@ -47,16 +47,17 @@ const Runner = () => {
 
         fetch(`https://stormy-savannah-56656.herokuapp.com/users`, meta)
         .then(res => res.json())
-        .then(data => {
-            // console.log(data.auth)
-            if(data.auth){
+        .then(async (data) => {
+          if(data.auth){
+            await setTimeout( () => {
               localStorage.setItem("token", data.token)
               setCurrentUser(data.user)
               setToken(localStorage.getItem("token"))
-            }
-            else {
-              alert(data.info)
-            }
+            }, 0)
+          }
+          else {
+            alert(data.info)
+          }
         })
 
     }
@@ -68,11 +69,8 @@ const Runner = () => {
     return (
         <Router>
             <Switch>
-            {/* <Route exact path="/" component={() => <App setToken={changeToken} currentUser={currentUser} setCurrentUser={setCurrentUser}/>}/> */}
-              <Route exact path="/KoolKhat/" render={()=> !!token ? <Redirect to='/KoolKhat/khat' /> : <Welcome setToken={changeToken} login={login} signup={signup}/>} />
+              <Route exact path="/KoolKhat/" render={()=> !!token ?  <Redirect to='/KoolKhat/khat' /> : <Welcome setToken={changeToken} login={login} signup={signup}/>} />
               <Route exact path="/KoolKhat/khat" render={() => !!token ? <App setToken={changeToken} currentUser={currentUser} setCurrentUser={setCurrentUser} /> : <Redirect to='/KoolKhat/'/>} />
-              {/* <Route exact path="/" render={() => this.state.searchedSchool ? <Redirect to='/listings'/> : <Body handleChange={this.handleChange} />} />
-              <Route exact path="/listings" render={() => <ListingsPage searchedSchool={this.state.searchedSchool} listingsData={this.state.listingsData} />} /> */}
             </Switch>
         </Router>
     )

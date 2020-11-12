@@ -166,7 +166,9 @@ const App = (props) => {
     
     const data = await res.json()
     console.log(data.users);
-    setCurrentChannel((prevState) => ({...prevState, channel: data.channel, messages: data.message_info, users: data.users}))
+    if (!!data){
+      setCurrentChannel((prevState) => ({...prevState, channel: data.channel, messages: data.message_info, users: data.users}))
+    }
   }
 
   const getChannels = () => {
