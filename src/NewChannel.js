@@ -27,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
         background: "whitesmoke",
         backgroundImage: `url(${backgroundLogo})`,
         backgroundSize: "auto",
-        border: "3px solid white"
+        border: "3px solid white",
+        borderRadius: "10%"
       },
 }))
 

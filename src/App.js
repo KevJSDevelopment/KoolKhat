@@ -217,7 +217,8 @@ const App = (props) => {
     const meta = {
       method: "PATCH",
       headers: {
-        "Authentication": `Bearer ${localStorage.getItem("token")}`
+        "Authentication": `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type" : "application/json"
       },
       body: JSON.stringify({
         background: ev.target[1].value,
@@ -226,7 +227,7 @@ const App = (props) => {
     }
 
 
-    fetch(`http://localhost:3000/users/${props.currentUser.id}`, meta)    
+    fetch(`https://stormy-savannah-56656.herokuapp.com/users/${props.currentUser.id}`, meta)    
     .then(res => res.json())
     .then(async (data) => {
       if (data.auth){

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import App from "./App"
 import Welcome from "./welcome"
@@ -65,12 +65,19 @@ const Runner = () => {
     const changeToken = (change) => {
         setToken(change)
     }
+
+    const updateCurrentUser = (user) => {
+      setCurrentUser(user)
+    }
+    useEffect(() => {
+      
+    }, [currentUser])
     
     return (
         <Router>
             <Switch>
               <Route exact path="/KoolKhat/" render={()=> !!token ?  <Redirect to='/KoolKhat/khat' /> : <Welcome setToken={changeToken} login={login} signup={signup}/>} />
-              <Route exact path="/KoolKhat/khat" render={() => !!token ? <App setToken={changeToken} currentUser={currentUser} setCurrentUser={setCurrentUser} /> : <Redirect to='/KoolKhat/'/>} />
+              <Route exact path="/KoolKhat/khat" render={() => !!token ? <App setToken={changeToken} currentUser={currentUser} setCurrentUser={updateCurrentUser} /> : <Redirect to='/KoolKhat/'/>} />
             </Switch>
         </Router>
     )

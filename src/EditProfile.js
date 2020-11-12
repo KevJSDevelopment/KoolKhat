@@ -27,7 +27,8 @@ const useStyles = makeStyles((theme) => ({
         background: "whitesmoke",
         backgroundImage: `url(${backgroundLogo})`,
         backgroundSize: "auto",
-        border: "3px solid white"
+        border: "3px solid white",
+        borderRadius: "10%"
       },
 }))
 
@@ -76,6 +77,8 @@ const EditProfile = (props) => {
                         <Button type="submit" style={{background: "#2bbd7e"}}>
                             save changes
                         </Button>
+                        <br/>
+                        Refresh page for changes
                     </Grid>
                 </Grid>
             </form>
