@@ -81,7 +81,7 @@ const App = (props) => {
 
   
   const [allChannels, setAllChannels] = useState([])
-  const [currentChannel, setCurrentChannel] = useState({channel: {}, messages: []})
+  const [currentChannel, setCurrentChannel] = useState({channel: {}, messages: [], users: []})
   // const [currentlySubscribed, setCurrentlySubscribed] = useState(props.currentUser.channels)
   // const [loginOpen, setLoginOpen] = useState(false);
   // const [loading, setLoading] = useState(true)
@@ -180,7 +180,8 @@ const App = (props) => {
     
     // debugger
     const data = await res.json()
-    setCurrentChannel((prevState) => ({...prevState, channel: data.channel, messages: data.message_info}))
+    console.log(data.users);
+    setCurrentChannel((prevState) => ({...prevState, channel: data.channel, messages: data.message_info, users: data.users}))
   }
 
   const getChannels = () => {

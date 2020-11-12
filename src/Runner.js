@@ -11,7 +11,7 @@ const Runner = () => {
     const login = (event) => {
         event.preventDefault()
         // debugger
-        fetch(`https://stormy-savannah-56656.herokuapp.com/login/${event.target[0].value}`, {
+        fetch(`https://stormy-savannah-56656.herokuapp.com/login`, {
           method: "POST",
           headers: {
             "Content-Type" : "application/json"
@@ -21,15 +21,22 @@ const Runner = () => {
         .then(res => res.json())
         .then(data => {
           // console.log(data)
-          localStorage.setItem("token", data.token)
-          setCurrentUser(data.user)
-          setToken(localStorage.getItem("token"))
+          // debugger
+          if(data.auth){
+            localStorage.setItem("token", data.token)
+            setCurrentUser(data.user)
+            setToken(localStorage.getItem("token"))
+          }
+          else {
+            alert(data.info)
+          }
         })
     }
 
     const signup = (event) => {
         event.preventDefault()
 
+        // if(event.target[0])
         const meta = {
             method: "POST",
             headers: {
@@ -41,10 +48,15 @@ const Runner = () => {
         fetch(`https://stormy-savannah-56656.herokuapp.com/users`, meta)
         .then(res => res.json())
         .then(data => {
-            console.log(data)
-            localStorage.setItem("token", data.token)
-            setCurrentUser(data.user)
-            setToken(localStorage.getItem("token"))
+            // console.log(data.auth)
+            if(data.auth){
+              localStorage.setItem("token", data.token)
+              setCurrentUser(data.user)
+              setToken(localStorage.getItem("token"))
+            }
+            else {
+              alert(data.info)
+            }
         })
 
     }

@@ -179,7 +179,9 @@ const DrawerAndNav = (props) => {
                 <br/>
                 <br/>
                 <Divider />
-                <div style={{textAlign: "center", backgroundColor: "#29434e"}}>Friends</div>
+                  <div style={{textAlign: "center", backgroundColor: "#29434e"}}>
+                    Speaking To
+                  </div>
                 <Divider />
                 <List>
                     {['All mail', 'Trash', 'Spam'].map((text, index) => (
