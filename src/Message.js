@@ -36,7 +36,7 @@ const Message = (props) => {
             style={{marginBottom:"1%"}}
             >
                 <Grid item xs={0} style={{margin: 5, marginLeft:"2%", marginRight: 0, padding: 0}}>
-                        <AccountCircleIcon style={{fill: props.user.icon, backgroundColor: props.user.background, borderRadius: "15px"}}/>
+                    <AccountCircleIcon style={{fill: props.user.icon, backgroundColor: props.user.background, borderRadius: "15px"}}/>
                 </Grid>
 
                 <Grid item xs={5} style={{margin: 5, marginLeft: 10, padding:0}}>

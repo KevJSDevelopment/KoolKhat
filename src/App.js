@@ -82,11 +82,6 @@ const App = (props) => {
   
   const [allChannels, setAllChannels] = useState([])
   const [currentChannel, setCurrentChannel] = useState({channel: {}, messages: [], users: []})
-  // const [currentlySubscribed, setCurrentlySubscribed] = useState(props.currentUser.channels)
-  // const [loginOpen, setLoginOpen] = useState(false);
-  // const [loading, setLoading] = useState(true)
-  
-  // const [currentMessage, setCurrentMessage] = useState({})
   
   /**************************************************************************************************/ 
   
@@ -94,11 +89,9 @@ const App = (props) => {
   const openWebSocket = (webSocketUrl, channelId) => {
     const socket = (new WebSocket(webSocketUrl))
     socket.onopen = event => {
-      // console.log("rocket socket!!")
       
       const meta = {
           id: channelId,
-          // change me!!!!
           channel: "ChannelChannel"
 
       }
@@ -125,7 +118,6 @@ const App = (props) => {
   const handleLogout = () => {
     localStorage.removeItem("token")
     props.setCurrentUser(null)
-    // setLoginOpen(false);
     props.setToken(false)
   }
 
@@ -158,27 +150,20 @@ const App = (props) => {
   }
 
   const fetchUser = async () => {
-    //make this dynamic
-    // localStorage.setItem("channelId", 12) //hardsetting localStorage, make sure number is set properly
     const meta = {
       headers: {
         "Authentication": `Bearer ${localStorage.getItem("token")}`
       }
     }
     const res = await fetch(`https://stormy-savannah-56656.herokuapp.com/login/user`, meta)
-    // debugger
     const data = await res.json()
 
     props.setCurrentUser(data.user)
-    // setLoading(false)
   }
 
   const getOldMessages = async () => {
-    //make this dynamic
-    // localStorage.setItem("channelId", 12) //hardsetting localStorage, make sure number is set properly
     const res = await fetch(`https://stormy-savannah-56656.herokuapp.com/channels/${localStorage.getItem("channelId")}`)
     
-    // debugger
     const data = await res.json()
     console.log(data.users);
     setCurrentChannel((prevState) => ({...prevState, channel: data.channel, messages: data.message_info, users: data.users}))
@@ -188,16 +173,14 @@ const App = (props) => {
     fetch(`https://stormy-savannah-56656.herokuapp.com/channels`)
       .then(res => res.json())
       .then(async (channels) => {
-        // debugger
         await setAllChannels(channels)
         subscribeToChannels(channels)
     })
   }
 
   const subscribeToChannels = (channels) => {
-    const arr = channels //currentlySubscribed// adjust to current channels
+    const arr = channels 
     arr.map(channel => {
-      // debugger
       localStorage.setItem("channelId", arr[0].id)
       const socket = openWebSocket(cableURL, channel.id)
 
@@ -232,7 +215,6 @@ const App = (props) => {
           setNewMessage(event)
         }
         await setAllChannels(prevState => ([...prevState, channelInfo]))
-        // await setCurrentlySubscribed(prevState => ([...prevState, channelInfo.id]))
         localStorage.setItem("channelId", channelInfo.id)
         getOldMessages()
         handleNewChannelClose()
@@ -253,7 +235,6 @@ const App = (props) => {
 
     const stay = async () => {
       await getOldMessages()
-      // console.log("ran");
     }
 
     awaitChannels()
@@ -266,7 +247,7 @@ const App = (props) => {
   return (
     <div className= {classes.root}>
 
-      <DrawerAndNav handleNewChannelOpen={handleNewChannelOpen} handleLogout={handleLogout} channels={allChannels} setChannel={setMyChannel}/> 
+      <DrawerAndNav handleNewChannelOpen={handleNewChannelOpen} handleLogout={handleLogout} channels={allChannels} users={currentChannel.users} setChannel={setMyChannel}/> 
       <main className={classes.content}>
         <div className={classes.toolbar} />
           <Container 

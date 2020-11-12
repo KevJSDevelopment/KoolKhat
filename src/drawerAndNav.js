@@ -22,6 +22,7 @@ import { Grid } from '@material-ui/core';
 // import Modal from '@material-ui/core/Modal'
 import logo from "./images/Logo.png"
 import AddToQueueIcon from '@material-ui/icons/AddToQueue';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 
 
 const drawerWidth = 180;
@@ -88,7 +89,10 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     '&:hover': {
         color: "#29434e",
-      }
+      },
+  },
+  listContainer: {
+    overflow: 'auto'
   },
   login: {
     color: "#FFFFFF",
@@ -183,11 +187,13 @@ const DrawerAndNav = (props) => {
                     Speaking To
                   </div>
                 <Divider />
-                <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem  button key={text}>
-                        <ListItemIcon className={classes.list}>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                        <ListItemText primary={text} />
+                <List className={classes.listContainer} style={{maxHeight: "25%"}}>
+                    {props.users.map((user) => (
+                        <ListItem  button key={user.username}>
+                          <ListItemIcon className={classes.list}>
+                            <AccountCircleIcon style={{fill: user.icon, backgroundColor: user.background, borderRadius: "15px"}}/> 
+                          </ListItemIcon>
+                        <ListItemText primary={user.username} />
                         </ListItem>
                     ))}
                 </List>
@@ -196,7 +202,7 @@ const DrawerAndNav = (props) => {
                   Rooms
                 </div>
                 <Divider />
-                <List style={{overflow: "auto", height: "35%"}}>
+                <List className={classes.listContainer} style={{height: "40%"}}>
                   <ListItem button onClick={() => props.handleNewChannelOpen()}>
                     <ListItemIcon >
                           <AddToQueueIcon/>
@@ -213,7 +219,9 @@ const DrawerAndNav = (props) => {
                   ))}
                 </List>
                 <Divider />
-                <div style={{textAlign: "center", backgroundColor: "#29434e"}}>Settings</div>
+                  <div style={{textAlign: "center", backgroundColor: "#29434e"}}>
+                    Settings
+                  </div>
                 <Divider />
             </Drawer>
         </div>
