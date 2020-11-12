@@ -210,7 +210,7 @@ const DrawerAndNav = (props) => {
                 <List className={classes.listContainer} style={{height: "40%"}}>
                   <ListItem button onClick={() => props.handleNewChannelOpen()}>
                     <ListItemIcon >
-                          <AddToQueueIcon/>
+                          <AddToQueueIcon style={{fill: "#2bbd7e" }}/>
                     </ListItemIcon>
                     <ListItemText primary={"New Room"}/>
                   </ListItem>
