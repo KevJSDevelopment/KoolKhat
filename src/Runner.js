@@ -69,6 +69,7 @@ const Runner = () => {
     const updateCurrentUser = (user) => {
       setCurrentUser(user)
     }
+    
     useEffect(() => {
       
     }, [currentUser])

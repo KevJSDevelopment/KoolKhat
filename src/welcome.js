@@ -146,7 +146,7 @@ const Welcome = (props) => {
       >
         <Toolbar style={{justifyContent: "space-between"}}>
           <Grid container xs={5} direction="row" >
-            <Grid item xs={3} direction="column">
+            <Grid item xs={3}>
               <Typography variant="inherit" style={{float:"left", fontSize: "18px", color: "#2bbd7e"}}>
                 <i>Kool</i> 
               </Typography>
@@ -174,7 +174,7 @@ const Welcome = (props) => {
           <div className={classes.banner} >
             <br/>
             <Grid container xs={12} direction="row" >
-              <Grid item xs={12} direction="column">
+              <Grid item xs={12}>
                 <Typography variant="h1" style={{marginLeft: "-20%" ,color: "#2bbd7e"}}>
                   <i>Kool</i> 
                 </Typography>

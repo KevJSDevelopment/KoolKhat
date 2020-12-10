@@ -94,10 +94,10 @@ const App = (props) => {
     socket.onopen = event => {
       
       const meta = {
-          id: channelId,
-          channel: "ChannelChannel"
-
+        id: channelId,
+        channel: "ChannelChannel"
       }
+      
       const msg = JSON.stringify({
         command: "subscribe",
         identifier: JSON.stringify(meta)
