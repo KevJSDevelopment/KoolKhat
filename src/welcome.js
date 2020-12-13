@@ -125,7 +125,7 @@ const Welcome = (props) => {
   };
 
   const handleLoginClose = () => {
-      setLoginOpen(false);
+    setLoginOpen(false);
   };
 
   const handleSignupOpen = () => {
@@ -133,7 +133,7 @@ const Welcome = (props) => {
   };
 
   const handleSignupClose = () => {
-      setSignupOpen(false);
+    setSignupOpen(false);
   };
 
   

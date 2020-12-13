@@ -1,8 +1,14 @@
 import React from 'react'
 
 const mochaTest = () => {
+    const handleClick = () => {
+        
+    }
+
     return(
-        <div>test2</div>
+        <div>
+            <button className="button" onClick={() => handleClick()}>Kalada's fancy button</button>
+        </div>
     )
 }
 
