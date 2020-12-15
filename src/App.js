@@ -287,8 +287,6 @@ const App = (props) => {
 
     stay()
 
-    props.setLoading(false)
-
   },[])
 
   return (

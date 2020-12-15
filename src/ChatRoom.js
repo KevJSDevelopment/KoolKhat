@@ -46,7 +46,7 @@ const ChatRoom = (props) => {
         >
             <Grid item xs={12}>
                 <Typography variant='h4' style={{textAlign: "center", color: "#FFFFFF"}}>
-                    <i> {props.channel.name} changed</i>
+                    <i> {props.channel.name} </i>
                 </Typography>
             </Grid>
             <Grid item xs= {12}>
