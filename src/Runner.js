@@ -7,6 +7,7 @@ const Runner = () => {
 
     const [token, setToken] = useState(localStorage.getItem("token"))
     const [currentUser, setCurrentUser] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     const login = (event) => {
         event.preventDefault()
@@ -63,7 +64,8 @@ const Runner = () => {
     }
 
     const changeToken = (change) => {
-        setToken(change)
+      setToken(change)
+      setLoading(false)
     }
 
     const updateCurrentUser = (user) => {
@@ -77,8 +79,7 @@ const Runner = () => {
         <Router>
             <Switch>
               <Route exact path="/KoolKhat/" render={()=> !!token ?  <Redirect to='/KoolKhat/khat' /> : <Welcome setToken={changeToken} login={login} signup={signup}/>} />
-              <Route exact path="/KoolKhat/khat" render={() => !!token ? <App setToken={changeToken} currentUser={currentUser} setCurrentUser={updateCurrentUser} /> : <Redirect to='/KoolKhat/'/>} />
-              <Redirect to="/KoolKhat/"/>
+              <Route exact path="/KoolKhat/khat" render={() => !loading && !!token ? <App setToken={changeToken} currentUser={currentUser} setCurrentUser={updateCurrentUser} /> : <Redirect to='/KoolKhat/'/>} />
             </Switch>
         </Router>
     )
