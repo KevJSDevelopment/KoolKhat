@@ -8,6 +8,7 @@ import DrawerAndNav from "./drawerAndNav"
 import Modal from '@material-ui/core/Modal'
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles"
 import NewChannel from './NewChannel'
+import EditProfile from "./EditProfile"
 
 const loginTheme = createMuiTheme({
   palette: {
@@ -74,19 +75,16 @@ const useStyles = makeStyles((theme) => ({
 
 const App = (props) => {
   //globals
-  const cableURL = "ws://localhost:3000/cable"
+  const cableURL = "wss://stormy-savannah-56656.herokuapp.com/cable"
 
   //hooks
   const classes = useStyles();
 
   
   const [allChannels, setAllChannels] = useState([])
-  const [currentChannel, setCurrentChannel] = useState({channel: {}, messages: []})
-  // const [currentlySubscribed, setCurrentlySubscribed] = useState(props.currentUser.channels)
-  // const [loginOpen, setLoginOpen] = useState(false);
-  // const [loading, setLoading] = useState(true)
-  
-  // const [currentMessage, setCurrentMessage] = useState({})
+  const [currentChannel, setCurrentChannel] = useState({channel: {}, messages: [], users: []})
+  const [newChannelOpen, setNewChannelOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   
   /**************************************************************************************************/ 
   
@@ -94,11 +92,9 @@ const App = (props) => {
   const openWebSocket = (webSocketUrl, channelId) => {
     const socket = (new WebSocket(webSocketUrl))
     socket.onopen = event => {
-      // console.log("rocket socket!!")
       
       const meta = {
           id: channelId,
-          // change me!!!!
           channel: "ChannelChannel"
 
       }
@@ -112,7 +108,7 @@ const App = (props) => {
     return socket
   }
 
-  const [newChannelOpen, setNewChannelOpen] = useState(false);
+
 
   const handleNewChannelOpen = () => {
     setNewChannelOpen(true);
@@ -122,17 +118,27 @@ const App = (props) => {
     setNewChannelOpen(false);
   };
 
+  const handleProfileOpen = () => {
+    setProfileOpen(true);
+  };
+
+  const handleProfileClose = () => {
+    setProfileOpen(false);
+  };
+
+
+
   const handleLogout = () => {
     localStorage.removeItem("token")
     props.setCurrentUser(null)
-    // setLoginOpen(false);
     props.setToken(false)
   }
 
 
+
   const makeMessage = (words) => {
     if (!!localStorage.getItem("token")){
-      fetch("http://localhost:3000/messages", {
+      fetch("https://stormy-savannah-56656.herokuapp.com/messages", {
         method: "POST",
         headers: {
           "Content-Type" : "application/json",
@@ -158,53 +164,87 @@ const App = (props) => {
   }
 
   const fetchUser = async () => {
-    //make this dynamic
-    // localStorage.setItem("channelId", 12) //hardsetting localStorage, make sure number is set properly
     const meta = {
       headers: {
         "Authentication": `Bearer ${localStorage.getItem("token")}`
       }
     }
-    const res = await fetch(`http://localhost:3000/login/user`, meta)
+    const res = await fetch(`https://stormy-savannah-56656.herokuapp.com/login/user`, meta)
     const data = await res.json()
 
     props.setCurrentUser(data.user)
-    // setLoading(false)
   }
 
   const getOldMessages = async () => {
-    //make this dynamic
-    // localStorage.setItem("channelId", 12) //hardsetting localStorage, make sure number is set properly
-    const res = await fetch(`http://localhost:3000/channels/${localStorage.getItem("channelId")}`)
+    const res = await fetch(`https://stormy-savannah-56656.herokuapp.com/channels/${localStorage.getItem("channelId")}`)
     
     const data = await res.json()
-    setCurrentChannel((prevState) => ({...prevState, channel: data.channel, messages: data.message_info}))
+    console.log(data.users);
+    if (!!data){
+      setCurrentChannel((prevState) => ({...prevState, channel: data.channel, messages: data.message_info, users: data.users}))
+    }
   }
 
   const getChannels = () => {
-    fetch(`http://localhost:3000/channels`)
+    fetch(`https://stormy-savannah-56656.herokuapp.com/channels`)
       .then(res => res.json())
-      .then(channels => {
-        setAllChannels(channels)
+      .then(async (channels) => {
+        await setAllChannels(channels)
+        subscribeToChannels(channels)
+    })
+  }
+
+  const subscribeToChannels = (channels) => {
+    const arr = channels 
+    arr.map(channel => {
+      localStorage.setItem("channelId", arr[0].id)
+      const socket = openWebSocket(cableURL, channel.id)
+
+      socket.onmessage = event => {
+        setNewMessage(event)
+      }
     })
   }
 
   const setMyChannel = (channel) => {
-    // if(!currentlySubscribed.includes(channel.id)){
-      const socket = openWebSocket(cableURL, channel.id)
-  
-      socket.onmessage = event => {
-        setNewMessage(event)
-      }
-    // }
     localStorage.setItem("channelId", channel.id)
     getOldMessages()
+  }
+
+  const changeProfile = (ev) => {
+    ev.preventDefault()
+
+    const meta = {
+      method: "PATCH",
+      headers: {
+        "Authentication": `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type" : "application/json"
+      },
+      body: JSON.stringify({
+        background: ev.target[1].value,
+        icon: ev.target[0].value,
+      })
+    }
+
+
+    fetch(`https://stormy-savannah-56656.herokuapp.com/users/${props.currentUser.id}`, meta)    
+    .then(res => res.json())
+    .then(async (data) => {
+      if (data.auth){
+        await props.setCurrentUser(data.user)
+        handleProfileClose()
+        console.log(data);
+      }
+      else{
+        alert(data.info)
+      }
+    })
   }
 
   const createNewChannel = (ev) => {
     ev.preventDefault()
     
-    fetch("http://localhost:3000/channels", {
+    fetch("https://stormy-savannah-56656.herokuapp.com/channels", {
       method: "POST",
       headers: {"Content-Type" : "application/json"},
       body: JSON.stringify({name: ev.target[0].value })
@@ -221,7 +261,6 @@ const App = (props) => {
           setNewMessage(event)
         }
         await setAllChannels(prevState => ([...prevState, channelInfo]))
-        // await setCurrentlySubscribed(prevState => ([...prevState, channelInfo.id]))
         localStorage.setItem("channelId", channelInfo.id)
         getOldMessages()
         handleNewChannelClose()
@@ -234,40 +273,26 @@ const App = (props) => {
     if (!!localStorage.getItem("token")){
       fetchUser()
     }
+    
+    const awaitChannels = async () => {
+      await getChannels()
+      return;
+    }
 
-    // if (!loading){
-      
-      const stay = async () => {
-        await getOldMessages()
-        console.log("ran");
-      }
+    const stay = async () => {
+      await getOldMessages()
+    }
 
-      stay()
+    awaitChannels()
 
-      getChannels()
-
-      const arr= [13,14]//currentlySubscribed// adjust to current channels
-
-      arr.map(channelId => {
-        localStorage.setItem("channelId", arr[0])
-        const socket = openWebSocket(cableURL, channelId)
-
-        socket.onmessage = event => {
-          setNewMessage(event)
-        }
-        return arr;
-      })
-
-      // console.log(loading);
-      
-    // }
+    stay()
 
   },[])
 
   return (
     <div className= {classes.root}>
 
-      <DrawerAndNav handleNewChannelOpen={handleNewChannelOpen} handleLogout={handleLogout} channels={allChannels} setChannel={setMyChannel}/> 
+      <DrawerAndNav handleNewChannelOpen={handleNewChannelOpen} handleLogout={handleLogout} channels={allChannels} users={currentChannel.users} setChannel={setMyChannel} handleProfileOpen={handleProfileOpen}/> 
       <main className={classes.content}>
         <div className={classes.toolbar} />
           <Container 
@@ -275,9 +300,6 @@ const App = (props) => {
           maxWidth= 'xl' 
           >
             <Grid container direction="row">
-              {/* left side  */}
-
-              {/* right side */}
               <ChatRoom classes={classes} makeMessage={makeMessage} messages={currentChannel.messages} currentUser={props.currentUser} channel={currentChannel.channel}/>
             </Grid>   
           </Container>
@@ -290,6 +312,17 @@ const App = (props) => {
         >
           <ThemeProvider theme={loginTheme}>
             <NewChannel createNewChannel={createNewChannel}/> 
+          </ThemeProvider>
+      </Modal>
+
+      <Modal
+        open={profileOpen}
+        onClose={handleProfileClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        >
+          <ThemeProvider theme={loginTheme}>
+            <EditProfile changeProfile={changeProfile}/> 
           </ThemeProvider>
       </Modal>
     </div>

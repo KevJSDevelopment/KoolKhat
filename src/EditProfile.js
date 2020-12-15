@@ -32,12 +32,12 @@ const useStyles = makeStyles((theme) => ({
       },
 }))
 
-const NewChannel = (props) => {
+const EditProfile = (props) => {
     const classes = useStyles();
     return (
         <div className={classes.modal}>
             <form noValidate autoComplete="off" onSubmit={(ev) => {
-                props.createNewChannel(ev)
+                props.changeProfile(ev)
             }}>
                 <Grid container 
                     direction="column"
@@ -49,9 +49,22 @@ const NewChannel = (props) => {
                     </Grid>
                     <Grid item xs={12} style={{margin: "1%", padding:"10px" , paddingTop:"0px"}} >
                         <TextField 
-                        placeholder="" 
+                        placeholder="name or hex"
                         id="standard-basic" 
-                        label="Room Name"
+                        label="Icon color"
+                        InputLabelProps={{
+                            classes: {
+                                root: classes.label,
+                                focused: classes.focusedLabel
+                            }
+                        }} 
+                        />
+                    </Grid>
+                    <Grid item xs={12} style={{margin: "1%", padding:"10px" , paddingTop:"0px"}} >
+                        <TextField 
+                        placeholder="name or hex" 
+                        id="standard-basic" 
+                        label="Icon background color"
                         InputLabelProps={{
                             classes: {
                                 root: classes.label,
@@ -62,8 +75,10 @@ const NewChannel = (props) => {
                     </Grid>
                     <Grid item xs={12} style={{margin: "3%", padding:"10px", paddingTop:"0"}}>
                         <Button type="submit" style={{background: "#2bbd7e"}}>
-                            Make ChatRoom
+                            save changes
                         </Button>
+                        <br/>
+                        Refresh page for changes
                     </Grid>
                 </Grid>
             </form>
@@ -71,4 +86,4 @@ const NewChannel = (props) => {
     )
 }
 
-export default NewChannel
+export default EditProfile
