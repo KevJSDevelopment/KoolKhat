@@ -78,6 +78,7 @@ const Runner = () => {
             <Switch>
               <Route exact path="/KoolKhat/" render={()=> !!token ?  <Redirect to='/KoolKhat/khat' /> : <Welcome setToken={changeToken} login={login} signup={signup}/>} />
               <Route exact path="/KoolKhat/khat" render={() => !!token ? <App setToken={changeToken} currentUser={currentUser} setCurrentUser={updateCurrentUser} /> : <Redirect to='/KoolKhat/'/>} />
+              <Redirect to="/KoolKhat/"/>
             </Switch>
         </Router>
     )
