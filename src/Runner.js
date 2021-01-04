@@ -10,7 +10,6 @@ const Runner = () => {
 
     const login = (event) => {
         event.preventDefault()
-        // debugger
         fetch(`https://stormy-savannah-56656.herokuapp.com/login`, {
           method: "POST",
           headers: {
